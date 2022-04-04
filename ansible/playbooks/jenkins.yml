@@ -1,0 +1,44 @@
+---
+- hosts: all
+  become: true
+
+  tasks:
+    - name: Include task to install packages that enable apt over HTTPS
+      ansible.builtin.include_tasks: includes/apt_over_https.yml
+
+    - name: Include task to install useful packages
+      ansible.builtin.include_tasks: includes/install_useful_packages.yml
+
+    - name: Add Jenkins apt key
+      ansible.builtin.apt_key:
+        state: present
+        url: https://pkg.jenkins.io/debian-stable/jenkins.io.key
+
+    - name: Set Jenkins apt repository
+      ansible.builtin.apt_repository:
+        repo: deb https://pkg.jenkins.io/debian-stable/ binary/
+        filename: jenkins
+        state: present
+
+    - name: Install Java and Jenkins
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - openjdk-8-jre-headless
+        - jenkins
+
+    - name: Start Jenkins
+      ansible.builtin.service:
+        name: jenkins
+        state: started
+        enabled: yes
+
+    - name: Get Admin password
+      ansible.builtin.slurp:
+        src: /var/lib/jenkins/secrets/initialAdminPassword
+      register: admin_password
+
+    - name: Print Admin password
+      ansible.builtin.debug:
+        msg: "{{ admin_password.content | b64decode | trim }}"
