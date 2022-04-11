@@ -7,3 +7,5 @@
   vars:
     packages:
       - net-tools
+      - jq
+      - mlocate

@@ -2,10 +2,16 @@
 - hosts: all
   become: true
 
+  environment:
+    JAVA_HOME: /usr/lib/jvm/java-11-openjdk-amd64
+    PATH: "{{ ansible_env.PATH }}:/usr/lib/jvm/java-11-openjdk-amd64/bin"
+    TERM: vt100
+
   vars:
     spinnaker_storage_type: minio
     spinnaker_user: spinnaker
     spinnaker_group: spinnaker
+    jvm_path: /usr/lib/jvm/java-11-openjdk-amd64/bin
 
   tasks:
     - name: Include task to install packages that enable apt over HTTPS
@@ -30,3 +36,27 @@
         shell: /bin/bash
         create_home: yes
         state: present
+
+    - name: Install Java
+      ansible.builtin.apt:
+        name: openjdk-11-jre-headless
+        state: present
+
+    # Does not set JAVA_HOME and fails as a result, so JAVA_HONE is set in environment above
+    - name: Download Halyard Installation script
+      ansible.builtin.get_url:
+        url: https://raw.githubusercontent.com/spinnaker/halyard/master/install/debian/InstallHalyard.sh
+        dest: /tmp/InstallHalyard.sh
+        owner: root
+        group: root
+        mode: 0755
+
+    - name: Execute Halyard Installation script
+      ansible.builtin.command: "/tmp/InstallHalyard.sh --user {{ spinnaker_user }} -y"
+
+  # Setup a handler for restarting Docker daemon
+  handlers:
+    - name: restart docker
+      ansible.builtin.service:
+        name: docker
+        state: restarted

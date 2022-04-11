@@ -9,6 +9,9 @@
     - name: Include task to install useful packages
       ansible.builtin.include_tasks: includes/install_useful_packages.yml
 
+    - name: Include task to install docker
+      ansible.builtin.include_tasks: includes/install_docker.yml
+
     - name: Add Jenkins apt key
       ansible.builtin.apt_key:
         state: present
@@ -25,7 +28,7 @@
         name: "{{ item }}"
         state: present
       loop:
-        - openjdk-8-jre-headless
+        - openjdk-11-jre-headless
         - jenkins
 
     - name: Start Jenkins
@@ -42,3 +45,10 @@
     - name: Print Admin password
       ansible.builtin.debug:
         msg: "{{ admin_password.content | b64decode | trim }}"
+
+  # Setup a handler for restarting Docker daemon
+  handlers:
+    - name: restart docker
+      ansible.builtin.service:
+        name: docker
+        state: restarted

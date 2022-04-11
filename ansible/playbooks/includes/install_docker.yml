@@ -19,8 +19,6 @@
       - docker-ce
       - docker-ce-cli
       - containerd.io
-  notify:
-    - docker status
 
 - name: Add vagrant user to docker group
   ansible.builtin.user:
@@ -32,10 +30,12 @@
     src: ../files/docker.json
     dest: /etc/docker/daemon.json
     mode: 0600
+  notify:
+    - restart docker
 
-- name: Enable and restart docker
+- name: Enable and start docker
   ansible.builtin.systemd:
     name: docker
-    state: restarted
+    state: started
     enabled: yes
     daemon_reload: yes
