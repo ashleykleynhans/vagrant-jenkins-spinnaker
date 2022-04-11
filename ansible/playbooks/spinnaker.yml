@@ -2,6 +2,31 @@
 - hosts: all
   become: true
 
+  vars:
+    spinnaker_storage_type: minio
+    spinnaker_user: spinnaker
+    spinnaker_group: spinnaker
+
   tasks:
-    - name: Nothing
-      debug: "Hello"
+    - name: Include task to install packages that enable apt over HTTPS
+      ansible.builtin.include_tasks: includes/apt_over_https.yml
+
+    - name: Include task to install useful packages
+      ansible.builtin.include_tasks: includes/install_useful_packages.yml
+
+    - name: Include task to install docker
+      ansible.builtin.include_tasks: includes/install_docker.yml
+
+    - name: Create spinnaker user group
+      ansible.builtin.group:
+        name: "{{ spinnaker_group }}"
+        state: present
+
+    - name: Create spinnaker user
+      ansible.builtin.user:
+        name: "{{ spinnaker_user }}"
+        group: "{{ spinnaker_group }}"
+        comment: Spinnaker user
+        shell: /bin/bash
+        create_home: yes
+        state: present
