@@ -1,4 +1,4 @@
- VAGRANT_IMAGE_NAME = "ubuntu/focal64"
+VAGRANT_IMAGE_NAME = "ubuntu/jammy64"
 
 Vagrant.configure("2") do |config|
     config.vm.box = VAGRANT_IMAGE_NAME
