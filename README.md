@@ -1,9 +1,8 @@
 # vagrant-jenkins-spinnaker
 
-
 # NOTE: This is a work in progress, and is currently incomplete
 
-Provision Jenkins and Spinnaker for CI/CD using Vagrant, Virtualbox and Ansible with the following configuration:
+Provision Jenkins and Spinnaker for CI/CD on Ubuntu 20.04 LTS using Vagrant, Virtualbox and Ansible with the following configuration:
 
 * 1 Jenkins box
 * 1 Spinnaker box
