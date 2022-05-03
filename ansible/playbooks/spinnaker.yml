@@ -70,6 +70,9 @@
       ansible.builtin.command: "/tmp/InstallHalyard.sh --user {{ spinnaker_user }} -y"
       when: not hal.stat.exists
 
+    - name: Set Spinnaker version in Halyard
+        ansible.builtin.shell: "hal config version edit --version {{ spinnaker_version }}"
+
     - name: Check whether Minio container is running
       ansible.builtin.shell: docker ps --all | grep minio1
       register: minio_running
@@ -104,9 +107,6 @@
     - name: Set Minio S3 as Storage backend in Halyard
       ansible.builtin.shell: hal config storage edit --type s3
 
-    - name: Set Spinnaker version in Halyard
-      ansible.builtin.shell: "hal config version edit --version {{ spinnaker_version }}"
-
     - name: Apply Halyard Deployment
       ansible.builtin.shell: hal deploy apply
 
@@ -117,9 +117,6 @@
         group: spinnaker
         mode: 0755
         state: present
-
-
-
 
   # Setup a handler for restarting Docker daemon
   handlers:

@@ -1,4 +1,4 @@
-VAGRANT_IMAGE_NAME = "ubuntu/focal64"
+VAGRANT_IMAGE_NAME = "ashleykleynhans/jammy64"
 
 Vagrant.configure("2") do |config|
     config.vm.box = VAGRANT_IMAGE_NAME
@@ -26,7 +26,7 @@ Vagrant.configure("2") do |config|
     config.vm.define "spinnaker" do |spinnaker|
         spinnaker.vm.provider "virtualbox" do |vb|
             vb.name = "spinnaker"
-            vb.memory = 2048
+            vb.memory = 4096
             vb.cpus = 2
         end
         spinnaker.vm.hostname = "spinnaker"
