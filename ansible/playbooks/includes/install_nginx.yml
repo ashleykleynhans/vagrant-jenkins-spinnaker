@@ -10,9 +10,12 @@
     state: absent
   notify: restart nginx
 
-- name: Copy nginx config across
+- name: Create nginx server config
   ansible.builtin.copy:
-    src: ../files/nginx
+    src: ../files/nginx.conf
+    dest: /etc/nginx/nginx.conf
+    mode: 0600
+  notify: restart nginx
 
 - name: Create nginx server config
   ansible.builtin.copy:

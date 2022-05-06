@@ -1,5 +1,5 @@
 server {
-    listen 80 ssl default;
+    listen 80 default;
     server_name _;
 
     index index.html index.htm;
