@@ -6,10 +6,15 @@
 Previous versions are not supported since their dependency packages are no longer
 available to download after JFrog sunset Bintray on 1st May 2021.
 
-Provision Jenkins and Spinnaker for CI/CD on Ubuntu 20.04 LTS using Vagrant, Virtualbox and Ansible with the following configuration:
+Provision Jenkins and Spinnaker for CI/CD using Vagrant, Virtualbox and Ansible with the following configuration:
 
-* 1 Jenkins box
-* 1 Spinnaker box
+* 1 Jenkins box running Ubuntu 18.04 LTS
+* 1 Spinnaker box running Ubuntu 22.04 LTS
+
+> The reason for Spinnaker running Ubuntu 22.04 LTS is because the spinnaker-community repos
+do not include sizes, and this causes issues when Halyard installs the spinnaker-igor
+and spinnaker-clouddriver dependency packages, and Halyard does not complete the
+installation process.
 
 ## Requirements
 
