@@ -1,0 +1,34 @@
+---
+- name: Check whether Minio container is running
+  ansible.builtin.shell: docker ps --all | grep minio1
+  register: minio_running
+  ignore_errors: True
+
+# Latest Minio release has config in a different format, so we use 2018 release
+- name: Run Minio Docker container
+  ansible.builtin.command: >-
+    docker run -p 127.0.0.1:9090:9000 -d --name minio1 -v /mnt/data:/data \
+    -v /mnt/config:/root/.minio minio/minio:RELEASE.2018-07-31T02-11-47Z server /data
+  when: minio_running.rc == 1
+
+- name: Ensure Minio Docker container is running
+  ansible.builtin.command: docker start minio1
+
+- name: Register Minio Secret Key
+  ansible.builtin.shell: >-
+    docker exec minio1 cat /root/.minio/config.json | jq -r '.credential.secretKey'
+  register: minio_secret_key
+
+- name: Register Minio Access Key
+  ansible.builtin.shell: >-
+    docker exec minio1 cat /root/.minio/config.json | jq -r '.credential.accessKey'
+  register: minio_access_key
+
+- name: Configure Minio S3 Storage backend in Halyard
+  ansible.builtin.shell: >-
+    echo {{ minio_secret_key.stdout }} | hal config storage s3 edit --endpoint http://127.0.0.1:9090 \
+    --access-key-id {{ minio_access_key.stdout }} \
+    --secret-access-key {{ minio_secret_key.stdout }}
+
+- name: Set Minio S3 as Storage backend in Halyard
+  ansible.builtin.shell: hal config storage edit --type s3

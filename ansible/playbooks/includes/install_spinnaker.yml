@@ -1,0 +1,67 @@
+---
+- name: Create spinnaker user group
+  ansible.builtin.group:
+    name: "{{ spinnaker_group }}"
+    state: present
+
+- name: Create spinnaker user
+  ansible.builtin.user:
+    name: "{{ spinnaker_user }}"
+    group: "{{ spinnaker_group }}"
+    comment: Spinnaker
+    shell: /bin/bash
+    create_home: yes
+    state: present
+
+# TODO: Confirm whether this is actually needed or not
+- name: Add an apt signing key for spinnaker-community repo
+  ansible.builtin.apt_key:
+    url: https://us-apt.pkg.dev/doc/repo-signing-key.gpg
+    state: present
+
+# TODO: Confirm whether this is actually needed or not
+- name: Add spinnaker-community apt repository
+  ansible.builtin.apt_repository:
+    repo: deb https://us-apt.pkg.dev/projects/spinnaker-community apt main
+    state: present
+
+- name: Install Java
+  ansible.builtin.apt:
+    name: openjdk-11-jre-headless
+    state: present
+
+# Does not set JAVA_HOME and fails as a result, so JAVA_HONE is set in
+# the environment in the spinnaker.yml playbook
+- name: Download Halyard Installation script
+  ansible.builtin.get_url:
+    url: "https://raw.githubusercontent.com/spinnaker/halyard/v{{ halyard_version }}/install/debian/InstallHalyard.sh"
+    dest: /tmp/InstallHalyard.sh
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Check whether Halyard is installed
+  ansible.builtin.stat:
+    path: /usr/local/bin/hal
+  register: hal
+
+- name: Execute Halyard Installation script
+  ansible.builtin.command: "/tmp/InstallHalyard.sh --user {{ spinnaker_user }} -y"
+  when: not hal.stat.exists
+
+- name: Set Spinnaker version in Halyard
+  ansible.builtin.command: "hal config version edit --version {{ spinnaker_version }}"
+
+- name: Include task to install Minio and configure it as the storage backend
+  ansible.builtin.include_tasks: includes/install_minio.yml
+
+- name: Apply Halyard Deployment
+  ansible.builtin.shell: hal deploy apply
+
+- name: Ensure /home/spinnaker/.hal/default/service-settings exists
+  ansible.builtin.file:
+    path: /home/spinnaker/.hal/default/service-settings
+    owner: spinnaker
+    group: spinnaker
+    mode: 0755
+    state: directory
