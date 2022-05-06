@@ -55,7 +55,7 @@
     # Does not set JAVA_HOME and fails as a result, so JAVA_HONE is set in environment above
     - name: Download Halyard Installation script
       ansible.builtin.get_url:
-        url: https://raw.githubusercontent.com/spinnaker/halyard/master/install/debian/InstallHalyard.sh
+        url: "https://raw.githubusercontent.com/spinnaker/halyard/{{ halyard_version }}/install/debian/InstallHalyard.sh"
         dest: /tmp/InstallHalyard.sh
         owner: root
         group: root
@@ -71,7 +71,7 @@
       when: not hal.stat.exists
 
     - name: Set Spinnaker version in Halyard
-        ansible.builtin.shell: "hal config version edit --version {{ spinnaker_version }}"
+      ansible.builtin.shell: "hal config version edit --version {{ spinnaker_version }}"
 
     - name: Check whether Minio container is running
       ansible.builtin.shell: docker ps --all | grep minio1
