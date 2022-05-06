@@ -32,7 +32,7 @@
       ansible.builtin.user:
         name: "{{ spinnaker_user }}"
         group: "{{ spinnaker_group }}"
-        comment: Spinnaker user
+        comment: Spinnaker
         shell: /bin/bash
         create_home: yes
         state: present
@@ -55,7 +55,7 @@
     # Does not set JAVA_HOME and fails as a result, so JAVA_HONE is set in environment above
     - name: Download Halyard Installation script
       ansible.builtin.get_url:
-        url: "https://raw.githubusercontent.com/spinnaker/halyard/{{ halyard_version }}/install/debian/InstallHalyard.sh"
+        url: "https://raw.githubusercontent.com/spinnaker/halyard/v{{ halyard_version }}/install/debian/InstallHalyard.sh"
         dest: /tmp/InstallHalyard.sh
         owner: root
         group: root
@@ -102,7 +102,7 @@
       ansible.builtin.shell: >-
         echo {{ minio_secret_key.stdout }} | hal config storage s3 edit --endpoint http://127.0.0.1:9090 \
         --access-key-id {{ minio_access_key.stdout }} \
-        --secret-access-key
+        --secret-access-key {{ minio_secret_key.stdout }}
 
     - name: Set Minio S3 as Storage backend in Halyard
       ansible.builtin.shell: hal config storage edit --type s3
@@ -116,7 +116,7 @@
         owner: spinnaker
         group: spinnaker
         mode: 0755
-        state: present
+        state: directory
 
   # Setup a handler for restarting Docker daemon
   handlers:
