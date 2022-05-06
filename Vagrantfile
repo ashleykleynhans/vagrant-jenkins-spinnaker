@@ -29,7 +29,7 @@ Vagrant.configure("2") do |config|
         spinnaker.vm.provider "virtualbox" do |vb, override|
             override.vm.box = SPINNAKER_IMAGE_OVERRIDE
             vb.name = "spinnaker"
-            vb.memory = 4096
+            vb.memory = 6144
             vb.cpus = 2
         end
         spinnaker.vm.hostname = "spinnaker"

@@ -23,9 +23,9 @@ At least the following hardware resources will be required on the host machine t
 | VM        | CPU | Memory |
 |-----------|-----|--------|
 | jenkins   |  2  | 2GB    |
-| spinnaker |  2  | 2GB    |
+| spinnaker |  2  | 6GB    |
 |           |     |        |
-| TOTAL     |  4  | 4GB    |
+| TOTAL     |  4  | 8GB    |
 
 ## Clone the GitHub Repository
 
