@@ -30,24 +30,32 @@
     name: openjdk-11-jre-headless
     state: present
 
-# Does not set JAVA_HOME and fails as a result, so JAVA_HONE is set in
-# the environment in the spinnaker.yml playbook
-- name: Download Halyard Installation script
-  ansible.builtin.get_url:
-    url: "https://raw.githubusercontent.com/spinnaker/halyard/v{{ halyard_version }}/install/debian/InstallHalyard.sh"
-    dest: /tmp/InstallHalyard.sh
+# Ignore errors because the systemd unit is broken and the service
+# fails to start and causes errors
+- name: Install Halyard
+  ansible.builtin.apt:
+    name: spinnaker-halyard
+    state: latest
+  ignore_errors: yes
+
+- name: Copy Halyard systemd service unit file across
+  ansible.builtin.template:
+    src: ../templates/halyard.service.j2
+    dest: /lib/systemd/system/halyard.service
     owner: root
     group: root
-    mode: 0755
+    mode: 0644
 
-- name: Check whether Halyard is installed
-  ansible.builtin.stat:
-    path: /usr/local/bin/hal
-  register: hal
+- name: Start Halyard service
+  ansible.builtin.systemd:
+    name: halyard
+    state: started
+    enabled: yes
+    daemon_reload: yes
 
-- name: Execute Halyard Installation script
-  ansible.builtin.command: "/tmp/InstallHalyard.sh --user {{ spinnaker_user }} -y"
-  when: not hal.stat.exists
+- name: Wait for Halyard service to start
+  ansible.builtin.pause:
+    seconds: 10
 
 - name: Set Spinnaker version in Halyard
   ansible.builtin.command: "hal config version edit --version {{ spinnaker_version }}"
@@ -61,8 +69,8 @@
 - name: Ensure /home/spinnaker/.hal/default/service-settings exists
   ansible.builtin.file:
     path: /home/spinnaker/.hal/default/service-settings
-    owner: spinnaker
-    group: spinnaker
+    owner: "{{ spinnaker_user }}"
+    group: "{{ spinnaker_group }}"
     mode: 0755
     state: directory
 
