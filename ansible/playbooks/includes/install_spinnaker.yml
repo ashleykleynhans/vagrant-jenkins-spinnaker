@@ -83,11 +83,6 @@
   loop:
     - gate
     - deck
-    - igor
-    - echo
-    - clouddriver
-    - orca
-    - rosco
 
 - name: Apply Halyard Deployment
   ansible.builtin.command: >-
@@ -97,6 +92,8 @@
   ansible.builtin.command: >-
     /usr/local/bin/hal deploy connect
 
+# These last two tasks are an ugly hack due to the Github issue:
+# https://github.com/spinnaker/spinnaker/issues/6706
 - name: Wait for Halyard Deployment
   ansible.builtin.pause:
     seconds: 60
