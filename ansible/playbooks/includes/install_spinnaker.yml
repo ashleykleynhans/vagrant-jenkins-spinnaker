@@ -1,81 +1,47 @@
 ---
-- name: Create spinnaker user group
-  ansible.builtin.group:
-    name: "{{ spinnaker_group }}"
-    state: present
-
-- name: Create spinnaker user
-  ansible.builtin.user:
-    name: "{{ spinnaker_user }}"
-    group: "{{ spinnaker_group }}"
-    comment: Spinnaker
-    shell: /bin/bash
-    create_home: yes
-    state: present
-
-# TODO: Confirm whether this is actually needed or not
 - name: Add an apt signing key for spinnaker-community repo
   ansible.builtin.apt_key:
     url: https://us-apt.pkg.dev/doc/repo-signing-key.gpg
     state: present
+    keyring: /usr/share/keyrings/spinnaker-community.gpg
 
-# TODO: Confirm whether this is actually needed or not
 - name: Add spinnaker-community apt repository
   ansible.builtin.apt_repository:
-    repo: deb https://us-apt.pkg.dev/projects/spinnaker-community apt main
+    repo: deb [signed-by=/usr/share/keyrings/spinnaker-community.gpg] https://us-apt.pkg.dev/projects/spinnaker-community apt main
     state: present
+    filename: spinnaker-community
 
 - name: Install Java
   ansible.builtin.apt:
     name: openjdk-11-jre-headless
     state: present
 
-# Ignore errors because the systemd unit is broken and the service
-# fails to start and causes errors
 - name: Install Halyard
   ansible.builtin.apt:
     name: spinnaker-halyard
     state: latest
-  ignore_errors: yes
-
-- name: Copy Halyard systemd service unit file across
-  ansible.builtin.template:
-    src: ../templates/halyard.service.j2
-    dest: /lib/systemd/system/halyard.service
-    owner: root
-    group: root
-    mode: 0644
-
-- name: Start Halyard service
-  ansible.builtin.systemd:
-    name: halyard
-    state: started
-    enabled: yes
-    daemon_reload: yes
 
 - name: Wait for Halyard service to start
   ansible.builtin.pause:
-    seconds: 10
+    seconds: 15
+
+- name: Create Spinnaker home directory
+  ansible.builtin.file:
+    path: /home/spinnaker
+    state: directory
+    owner: spinnaker
+    group: spinnaker
+    mode: 0755
 
 - name: Set Spinnaker version in Halyard
-  ansible.builtin.command: "hal config version edit --version {{ spinnaker_version }}"
+  ansible.builtin.command: >-
+    /usr/local/bin/hal config version edit --version {{ spinnaker_version }}
 
 - name: Include task to install Minio and configure it as the storage backend
   ansible.builtin.include_tasks: includes/install_minio.yml
 
 - name: Apply Halyard Deployment
   ansible.builtin.command: hal deploy apply
-
-- name: Ensure /home/spinnaker/.hal/default/service-settings exists
-  ansible.builtin.file:
-    path: /home/spinnaker/.hal/default/service-settings
-    owner: "{{ spinnaker_user }}"
-    group: "{{ spinnaker_group }}"
-    mode: 0755
-    state: directory
-
-- name: Perform daemon reload
-  ansible.builtin.command: systemctl daemon-reload
 
 - name: Connect Halyard Deployment
   ansible.builtin.command: hal deploy connect
