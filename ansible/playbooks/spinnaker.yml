@@ -24,11 +24,6 @@
       ansible.builtin.include_tasks: includes/install_nginx.yml
 
   handlers:
-    - name: restart docker
-      ansible.builtin.service:
-        name: docker
-        state: restarted
-
     - name: restart nginx
       ansible.builtin.service:
         name: nginx

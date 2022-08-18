@@ -30,12 +30,10 @@
     src: ../files/docker.json
     dest: /etc/docker/daemon.json
     mode: 0600
-  notify:
-    - restart docker
 
 - name: Enable and start docker
   ansible.builtin.systemd:
     name: docker
-    state: started
+    state: restarted
     enabled: yes
     daemon_reload: yes
