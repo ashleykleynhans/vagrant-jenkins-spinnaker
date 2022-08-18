@@ -97,6 +97,10 @@
   ansible.builtin.command: >-
     /usr/local/bin/hal deploy connect
 
+- name: Wait for Halyard Deployment
+  ansible.builtin.pause:
+    seconds: 60
+
 - name: Restart front50 which fails to start after deployment
   ansible.builtin.systemd:
     name: front50
