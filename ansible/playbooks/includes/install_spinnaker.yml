@@ -11,6 +11,16 @@
     state: present
     filename: spinnaker-community
 
+- name: Get Ubuntu version
+  ansible.builtin.shell: >-
+    lsb_release -r | awk {'print $2'}
+  register: ubuntu_version
+
+- name: Add PPA repository for JDK 11 on Ubuntu 16.04
+  ansible.builtin.apt_repository:
+    repo: ppa:openjdk-r/ppa
+  when: ubuntu_version.stdout_lines[0] == '16.04'
+
 - name: Install Java
   ansible.builtin.apt:
     name: openjdk-11-jre-headless
@@ -25,14 +35,17 @@
   ansible.builtin.pause:
     seconds: 15
 
-- name: Create Spinnaker home directory
-  ansible.builtin.file:
-    path: /home/spinnaker
-    state: directory
-    owner: spinnaker
-    group: spinnaker
-    mode: 0755
+- name: Create group
+  ansible.builtin.group:
+    name: spinnaker
+    state: present
 
+- name: Create Spinnaker user
+  ansible.builtin.user:
+    name: spinnaker
+    comment: Spinnaker
+    groups: spinnaker
+    shell: /bin/bash
 - name: Set Spinnaker version in Halyard
   ansible.builtin.command: >-
     /usr/local/bin/hal config version edit --version {{ spinnaker_version }}
