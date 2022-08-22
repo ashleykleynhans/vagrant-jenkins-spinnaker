@@ -7,7 +7,7 @@
 
 - name: Add spinnaker-community apt repository
   ansible.builtin.apt_repository:
-    repo: deb [signed-by=/usr/share/keyrings/spinnaker-community.gpg] https://us-apt.pkg.dev/projects/spinnaker-community apt main
+    repo: deb [signed-by=/usr/share/keyrings/spinnaker-community.gpg arch=all] https://us-apt.pkg.dev/projects/spinnaker-community apt main
     state: present
     filename: spinnaker-community
 
