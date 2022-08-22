@@ -1,10 +1,15 @@
 # vagrant-jenkins-spinnaker
 
-> Supports Spinnaker v1.27.0 and higher, and Halyard v1.45.0 and higher.
-Previous versions are not supported since their dependency packages are no longer
-available to download after JFrog sunset Bintray on 1st May 2021.
+> Supports Ubuntu 16.04 LTS and Ubuntu 18.04 LTS only.  Newer versions of
+Ubuntu are not supported since the Halyard installation fails on them.
 
-Provision Jenkins and Spinnaker for CI/CD using Vagrant, Virtualbox and Ansible with the following configuration:
+> Supports Spinnaker v1.27.0 and higher, and Halyard v1.47.0 and higher.
+Previous versions are not supported since their dependency packages are no longer
+available to download after JFrog sunset Bintray on 1st May 2021, and the
+Halyard post installation script is broken on some newer releases.
+
+Provision Jenkins and Spinnaker for CI/CD using Vagrant, Virtualbox and
+Ansible with the following configuration:
 
 * 1 Jenkins box running Ubuntu 18.04 LTS
 * 1 Spinnaker box running Ubuntu 22.04 LTS
@@ -16,7 +21,8 @@ installation process.
 
 ## Requirements
 
-At least the following hardware resources will be required on the host machine that will be running the VirtualBox guest VMs:
+At least the following hardware resources will be required on the host machine that will
+be running the VirtualBox guest VMs:
 
 | VM        | CPU | Memory |
 |-----------|-----|--------|
@@ -45,7 +51,8 @@ Run the following command from the terminal to install homebrew:
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
-All of the remaining software can be installed by cloning the git repository and  running the setup script provided.
+All of the remaining software can be installed by cloning the git repository and
+running the setup script provided.
 
 Run the setup script from the terminal to install the required software:
 
