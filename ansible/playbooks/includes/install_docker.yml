@@ -3,11 +3,13 @@
   ansible.builtin.apt_key:
     url: https://download.docker.com/linux/ubuntu/gpg
     state: present
+    keyring: /usr/share/keyrings/docker.gpg
 
 - name: Add apt repository for stable version of Docker
   ansible.builtin.apt_repository:
-    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
+    repo: deb [signed-by=/usr/share/keyrings/docker.gpg arch=amd64] https://download.docker.com/linux/ubuntu jammy stable
     state: present
+    filename: docker
 
 - name: Install docker and its dependencies
   ansible.builtin.apt:

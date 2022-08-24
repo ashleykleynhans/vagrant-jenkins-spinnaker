@@ -1,4 +1,4 @@
 ---
-spinnaker_version: 1.27.1
+spinnaker_version: 1.28.1
 spinnaker_storage_type: minio
 jvm_path: /usr/lib/jvm/java-11-openjdk-amd64/bin

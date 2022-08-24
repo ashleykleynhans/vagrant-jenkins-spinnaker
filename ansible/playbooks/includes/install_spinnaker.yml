@@ -9,7 +9,7 @@
   ansible.builtin.apt_repository:
     repo: deb [signed-by=/usr/share/keyrings/spinnaker-community.gpg arch=all] https://us-apt.pkg.dev/projects/spinnaker-community apt main
     state: present
-    filename: spinnaker-community
+    filename: spinnaker
 
 - name: Get Ubuntu version
   ansible.builtin.shell: >-
