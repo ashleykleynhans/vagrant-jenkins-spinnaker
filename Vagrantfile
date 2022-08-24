@@ -1,8 +1,7 @@
-DEFAULT_IMAGE = "ashleykleynhans/jammy64"
-SPINNAKER_IMAGE_OVERRIDE = "ubuntu/bionic64"
+IMAGE = "ashleykleynhans/jammy64"
 
 Vagrant.configure("2") do |config|
-    config.vm.box = DEFAULT_IMAGE
+    config.vm.box = IMAGE
     config.vm.box_check_update = false
     config.ssh.insert_key = false
 
@@ -27,7 +26,6 @@ Vagrant.configure("2") do |config|
     # Provision Spinnaker
     config.vm.define "spinnaker" do |spinnaker|
         spinnaker.vm.provider "virtualbox" do |vb, override|
-            override.vm.box = SPINNAKER_IMAGE_OVERRIDE
             vb.name = "spinnaker"
             vb.memory = 6144
             vb.cpus = 2
