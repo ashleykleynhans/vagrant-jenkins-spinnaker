@@ -1,23 +1,9 @@
 # vagrant-jenkins-spinnaker
 
-> Supports Ubuntu 16.04 LTS and Ubuntu 18.04 LTS only.  Newer versions of
-Ubuntu are not supported since the Halyard installation fails on them.
-
-> Supports Spinnaker v1.27.0 and higher, and Halyard v1.47.0 and higher.
-Previous versions are not supported since their dependency packages are no longer
-available to download after JFrog sunset Bintray on 1st May 2021, and the
-Halyard post installation script is broken on some newer releases.
+> Supports Spinnaker v1.28.1 and higher, and Halyard v1.49.0 and higher.
 
 Provision Jenkins and Spinnaker for CI/CD using Vagrant, Virtualbox and
-Ansible with the following configuration:
-
-* 1 Jenkins box running Ubuntu 18.04 LTS
-* 1 Spinnaker box running Ubuntu 22.04 LTS
-
-> The reason for Spinnaker running Ubuntu 18.04 LTS is because the spinnaker-community repos
-do not include sizes, and this causes issues when Halyard installs the spinnaker-igor
-and spinnaker-clouddriver dependency packages, and Halyard does not complete the
-installation process.
+Ansible.
 
 ## Requirements
 
