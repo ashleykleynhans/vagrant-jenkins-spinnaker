@@ -1,0 +1,21 @@
+---
+- name: Apply Halyard Deployment
+  ansible.builtin.command: >-
+    /usr/local/bin/hal deploy apply
+
+- name: Connect Halyard Deployment
+  ansible.builtin.command: >-
+    /usr/local/bin/hal deploy connect
+
+# These last two tasks are an ugly hack due to the Github issue:
+# https://github.com/spinnaker/spinnaker/issues/6706
+- name: Wait for Halyard Deployment
+  ansible.builtin.pause:
+    seconds: 60
+
+- name: Restart front50 which fails to start after deployment
+  ansible.builtin.systemd:
+    name: front50
+    state: restarted
+    enabled: yes
+    daemon_reload: yes

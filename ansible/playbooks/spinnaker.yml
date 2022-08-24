@@ -17,8 +17,17 @@
     - name: Include task to install Docker
       ansible.builtin.include_tasks: includes/install_docker.yml
 
+    - name: Include task to install Minio as the S3 persistent storage backend
+      ansible.builtin.include_tasks: includes/install_minio.yml
+
     - name: Include task to install Spinnaker
       ansible.builtin.include_tasks: includes/install_spinnaker.yml
+
+    - name: Include task to configure Spinnaker
+      ansible.builtin.include_tasks: includes/configure_spinnaker.yml
+
+    - name: Include task to apply and connect Spinnaker deployment
+      ansible.builtin.include_tasks: includes/apply_spinnaker_deployment.yml
 
     - name: Include task to install Nginx
       ansible.builtin.include_tasks: includes/install_nginx.yml
