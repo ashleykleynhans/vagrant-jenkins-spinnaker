@@ -20,9 +20,10 @@
 
 - name: Configure Minio S3 Storage backend in Halyard
   ansible.builtin.shell: >-
-    echo {{ minio_secret_key.stdout }} | hal config storage s3 edit --endpoint http://127.0.0.1:9090 \
+    echo {{ minio_secret_key.stdout }} | \
+    hal config storage s3 edit --endpoint http://127.0.0.1:9090 \
     --access-key-id {{ minio_access_key.stdout }} \
-    --secret-access-key {{ minio_secret_key.stdout }}
+    --secret-access-key
 
 - name: Set Minio S3 as Storage backend in Halyard
   ansible.builtin.shell: >-
