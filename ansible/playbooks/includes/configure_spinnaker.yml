@@ -3,6 +3,10 @@
   ansible.builtin.command: >-
     /usr/local/bin/hal config version edit --version {{ spinnaker_version }}
 
+- name: Configure Spinnaker timezone
+  ansible.builtin.command: >-
+    /usr/local/bin/hal config edit --timezone {{ spinnaker_timezone }}
+
 - name: Override base URL for Security UI
   ansible.builtin.command: >-
     /usr/local/bin/hal config security ui edit \
@@ -21,7 +25,7 @@
 - name: Configure Minio S3 Storage backend in Halyard
   ansible.builtin.shell: >-
     echo {{ minio_secret_key.stdout }} | \
-    hal config storage s3 edit --endpoint http://127.0.0.1:9090 \
+    /usr/local/bin/hal config storage s3 edit --endpoint http://127.0.0.1:9090 \
     --access-key-id {{ minio_access_key.stdout }} \
     --secret-access-key
 
