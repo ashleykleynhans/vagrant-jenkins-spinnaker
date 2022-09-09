@@ -51,3 +51,19 @@
   loop:
     - gate
     - deck
+
+- name: Ensure that /home/spinnaker/.hal/default/profiles exists
+  ansible.builtin.file:
+    path: /home/spinnaker/.hal/default/profiles
+    state: directory
+    owner: spinnaker
+    group: spinnaker
+    mode: 0755
+
+- name: Disable S3 versioning in Front50, which is incompatible with Minio
+  ansible.builtin.copy:
+    src: ../files/front50-local.yml
+    dest: /home/spinnaker/.hal/default/profiles/front50-local.yml
+    owner: spinnaker
+    group: spinnaker
+    mode: 0644

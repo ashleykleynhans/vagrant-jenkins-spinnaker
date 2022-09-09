@@ -3,21 +3,8 @@
   ansible.builtin.command: >-
     /usr/local/bin/hal deploy apply
 
-- name: Start Spinnakwr automatically on reboot
+- name: Start Spinnaker automatically on reboot
   ansible.builtin.systemd:
     name: spinnaker
-    enabled: yes
-    daemon_reload: yes
-
-# These last two tasks are an ugly hack due to the Github issue:
-# https://github.com/spinnaker/spinnaker/issues/6706
-- name: Wait for Halyard Deployment
-  ansible.builtin.pause:
-    seconds: 60
-
-- name: Restart front50 which fails to start after deployment
-  ansible.builtin.systemd:
-    name: front50
-    state: restarted
     enabled: yes
     daemon_reload: yes
