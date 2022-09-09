@@ -1,0 +1,12 @@
+[Unit]
+Description=Minio container
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker start -a minio1
+ExecStop=/usr/bin/docker stop -t 2 minio1
+
+[Install]
+WantedBy=default.target

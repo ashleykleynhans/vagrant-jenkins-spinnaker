@@ -46,3 +46,8 @@
     comment: Spinnaker
     groups: spinnaker
     shell: /bin/bash
+
+- name: Ensure that Halyard starts on reboot
+  ansible.builtin.systemd:
+    name: halyard
+    enabled: yes

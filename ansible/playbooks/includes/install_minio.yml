@@ -24,3 +24,18 @@
   ansible.builtin.shell: >-
     docker exec minio1 cat /root/.minio/config.json | jq -r '.credential.accessKey'
   register: minio_access_key
+
+- name: Create minio systemd unit file
+  ansible.builtin.copy:
+    src: ../files/minio.service
+    dest: /etc/systemd/system/minio.service
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Enable and start minio
+  ansible.builtin.systemd:
+    name: minio
+    state: restarted
+    enabled: yes
+    daemon_reload: yes

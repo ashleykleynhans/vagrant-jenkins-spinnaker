@@ -3,9 +3,11 @@
   ansible.builtin.command: >-
     /usr/local/bin/hal deploy apply
 
-- name: Connect Halyard Deployment
-  ansible.builtin.command: >-
-    /usr/local/bin/hal deploy connect
+- name: Start Spinnakwr automatically on reboot
+  ansible.builtin.systemd:
+    name: spinnaker
+    enabled: yes
+    daemon_reload: yes
 
 # These last two tasks are an ugly hack due to the Github issue:
 # https://github.com/spinnaker/spinnaker/issues/6706
