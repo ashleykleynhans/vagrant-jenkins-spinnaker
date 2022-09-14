@@ -11,16 +11,6 @@
     state: present
     filename: spinnaker
 
-- name: Get Ubuntu version
-  ansible.builtin.shell: >-
-    lsb_release -r | awk {'print $2'}
-  register: ubuntu_version
-
-- name: Add PPA repository for JDK 11 on Ubuntu 16.04
-  ansible.builtin.apt_repository:
-    repo: ppa:openjdk-r/ppa
-  when: ubuntu_version.stdout_lines[0] == '16.04'
-
 - name: Install Java
   ansible.builtin.apt:
     name: openjdk-11-jre-headless
@@ -46,8 +36,3 @@
     comment: Spinnaker
     groups: spinnaker
     shell: /bin/bash
-
-- name: Ensure that Halyard starts on reboot
-  ansible.builtin.systemd:
-    name: halyard
-    enabled: yes

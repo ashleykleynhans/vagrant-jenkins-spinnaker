@@ -2,9 +2,3 @@
 - name: Apply Halyard Deployment
   ansible.builtin.command: >-
     /usr/local/bin/hal deploy apply
-
-- name: Start Spinnaker automatically on reboot
-  ansible.builtin.systemd:
-    name: spinnaker
-    enabled: yes
-    daemon_reload: yes

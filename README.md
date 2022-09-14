@@ -1,6 +1,6 @@
 # vagrant-jenkins-spinnaker
 
-> Supports Spinnaker v1.28.1 and higher, and Halyard v1.49.0 and higher.
+> Supports Spinnaker v1.28.1 and higher, and Halyard v1.51.0 and higher.
 
 Provision Jenkins and Spinnaker for CI/CD using Vagrant, Virtualbox and
 Ansible.
