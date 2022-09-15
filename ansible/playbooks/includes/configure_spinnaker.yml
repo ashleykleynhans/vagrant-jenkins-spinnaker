@@ -1,37 +1,37 @@
 ---
 - name: Set Spinnaker version in Halyard
   ansible.builtin.command: >-
-    /usr/local/bin/hal config version edit --version {{ spinnaker_version }}
+    hal config version edit --version {{ spinnaker_version }}
 
 - name: Configure Spinnaker timezone
   ansible.builtin.command: >-
-    /usr/local/bin/hal config edit --timezone {{ spinnaker_timezone }}
+    hal config edit --timezone {{ spinnaker_timezone }}
 
 - name: Override base URL for Security UI
   ansible.builtin.command: >-
-    /usr/local/bin/hal config security ui edit \
+    hal config security ui edit \
     --override-base-url http://{{ node_ip }}:9000
 
 - name: Override base URL for Security API
   ansible.builtin.command: >-
-    /usr/local/bin/hal config security api edit \
+    hal config security api edit \
     --override-base-url http://{{ node_ip }}:8084
 
 - name: Configure CORS Access Pattern for Security API
   ansible.builtin.command: >-
-    /usr/local/bin/hal config security api edit \
+    hal config security api edit \
     --cors-access-pattern http://{{ node_ip }}
 
 - name: Configure Minio S3 Storage backend in Halyard
   ansible.builtin.shell: >-
     echo {{ minio_secret_key.stdout }} | \
-    /usr/local/bin/hal config storage s3 edit --endpoint http://127.0.0.1:9090 \
+    hal config storage s3 edit --endpoint http://127.0.0.1:9090 \
     --access-key-id {{ minio_access_key.stdout }} \
     --secret-access-key
 
 - name: Set Minio S3 as Storage backend in Halyard
   ansible.builtin.shell: >-
-    /usr/local/bin/hal config storage edit --type s3
+    hal config storage edit --type s3
 
 - name: Ensure that /home/spinnaker/.hal/default/service-settings exists
   ansible.builtin.file:

@@ -1,4 +1,4 @@
 ---
 - name: Apply Halyard Deployment
   ansible.builtin.command: >-
-    /usr/local/bin/hal deploy apply
+    hal deploy apply

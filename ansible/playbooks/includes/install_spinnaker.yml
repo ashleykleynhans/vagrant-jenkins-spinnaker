@@ -25,14 +25,7 @@
   ansible.builtin.pause:
     seconds: 15
 
-- name: Create group
-  ansible.builtin.group:
-    name: spinnaker
-    state: present
-
-- name: Create Spinnaker user
+- name: Create Spinnaker user home directory
   ansible.builtin.user:
     name: spinnaker
-    comment: Spinnaker
-    groups: spinnaker
-    shell: /bin/bash
+    create_home: yes
