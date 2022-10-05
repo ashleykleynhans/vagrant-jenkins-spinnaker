@@ -25,6 +25,7 @@
   ansible.builtin.pause:
     seconds: 15
 
+# TODO: Remove when PR is merged to fix this
 - name: Create Spinnaker user home directory
   ansible.builtin.user:
     name: spinnaker
