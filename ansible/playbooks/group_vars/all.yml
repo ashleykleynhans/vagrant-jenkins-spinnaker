@@ -1,5 +1,5 @@
 ---
-vm_architecture: amd64
+vm_architecture: arm64
 spinnaker_version: 1.28.1
 halyard_version: 1.51.0
 spinnaker_storage_type: minio

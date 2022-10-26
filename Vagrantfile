@@ -7,7 +7,7 @@ Vagrant.configure("2") do |config|
 
     # Provision Jenkins
     config.vm.define "jenkins" do |jenkins|
-        jenkins.vm.provider "virtualbox" do |vb|
+        jenkins.vm.provider "parallels" do |vb|
             vb.name = "jenkins"
             vb.memory = 2048
             vb.cpus = 2
@@ -25,7 +25,7 @@ Vagrant.configure("2") do |config|
 
     # Provision Spinnaker
     config.vm.define "spinnaker" do |spinnaker|
-        spinnaker.vm.provider "virtualbox" do |vb, override|
+        spinnaker.vm.provider "parallels" do |vb, override|
             vb.name = "spinnaker"
             vb.memory = 6144
             vb.cpus = 2
