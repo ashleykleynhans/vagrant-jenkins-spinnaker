@@ -3,8 +3,8 @@
   become: true
 
   environment:
-    JAVA_HOME: /usr/lib/jvm/java-11-openjdk-amd64
-    PATH: "{{ ansible_env.PATH }}:/usr/lib/jvm/java-11-openjdk-amd64/bin"
+    JAVA_HOME: "/usr/lib/jvm/java-11-openjdk-{{ vm_architecture }}"
+    PATH: "{{ ansible_env.PATH }}:/usr/lib/jvm/java-11-openjdk-{{ vm_architecture }}/bin"
     TERM: vt100
 
   tasks:
@@ -26,7 +26,7 @@
     - name: Include task to configure Spinnaker
       ansible.builtin.include_tasks: includes/configure_spinnaker.yml
 
-    - name: Include task to apply and connect Spinnaker deployment
+    - name: Include task to apply Spinnaker deployment
       ansible.builtin.include_tasks: includes/apply_spinnaker_deployment.yml
 
     - name: Include task to install Nginx

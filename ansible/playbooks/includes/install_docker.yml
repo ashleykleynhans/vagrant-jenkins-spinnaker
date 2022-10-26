@@ -7,7 +7,7 @@
 
 - name: Add apt repository for stable version of Docker
   ansible.builtin.apt_repository:
-    repo: deb [signed-by=/usr/share/keyrings/docker.gpg arch=amd64] https://download.docker.com/linux/ubuntu jammy stable
+    repo: "deb [signed-by=/usr/share/keyrings/docker.gpg arch={{ vm_architecture }}] https://download.docker.com/linux/ubuntu jammy stable"
     state: present
     filename: docker
 

@@ -18,8 +18,8 @@
 
 - name: Install Halyard
   ansible.builtin.apt:
-    name: spinnaker-halyard
-    state: latest
+    name: "spinnaker-halyard={{ halyard_version }}"
+    state: present
 
 - name: Wait for Halyard service to start
   ansible.builtin.pause:
