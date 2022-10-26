@@ -2,8 +2,9 @@
 
 > Supports Spinnaker v1.28.1 and higher, and Halyard v1.51.0 and higher.
 
-Provision Jenkins and Spinnaker for CI/CD using Vagrant, Virtualbox and
-Ansible.
+Provision Jenkins and Spinnaker for CI/CD using Vagrant and Ansible.
+
+> Supports amd64 on Virtualbox and arm64 on Parallels (for Apple Silicon).
 
 ## Requirements
 
@@ -23,6 +24,29 @@ Run the following command from the terminal to clone the GitHub Repository:
 
 ```bash
 git clone https://github.com/ashleykleynhans/vagrant-jenkins-spinnaker.git
+```
+
+## Check out the branch for your required Virtualization type
+
+## VirtualBox (amd64) - Generic
+
+```bash
+git checkout virtualbox
+```
+
+## Parallels (arm64) - Apple Silicon
+
+```bash
+git checkout parallels
+```
+
+To use the Parallels Vagrant provider, you will need to
+install the Parallels Vagrant plugin, and Parallels
+Virtualization SDK.
+```bash
+vagrant plugin install vagrant-parallels
+brew install --cask parallels-virtualization-sdk
+sudo ln -s /Library/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/prlsdkapi.pth /Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/site-packages/prlsdkapi.pth
 ```
 
 ## Install Required Software
