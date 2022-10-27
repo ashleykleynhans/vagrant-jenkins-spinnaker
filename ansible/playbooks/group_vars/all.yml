@@ -1,5 +1,5 @@
 ---
-vm_architecture: arm64
+vm_architecture: amd64
 spinnaker_version: 1.28.1
 spinnaker_storage_type: minio
 spinnaker_timezone: America/Los_Angeles
