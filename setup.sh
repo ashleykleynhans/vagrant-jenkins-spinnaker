@@ -24,7 +24,8 @@ vagrant plugin install vagrant_utm
 
 # Install Packer (for building the base box)
 echo "Installing Packer"
-brew install packer
+brew tap hashicorp/tap
+brew install hashicorp/tap/packer
 
 # Install Ansible
 echo "Installing Ansible"

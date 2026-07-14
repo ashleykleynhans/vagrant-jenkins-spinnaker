@@ -45,7 +45,8 @@ brew install vagrant
 vagrant plugin install vagrant_utm
 
 # Install Packer
-brew install packer
+brew tap hashicorp/tap
+brew install hashicorp/tap/packer
 
 # Install Ansible
 brew install ansible
