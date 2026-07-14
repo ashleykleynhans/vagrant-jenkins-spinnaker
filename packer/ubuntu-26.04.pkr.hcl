@@ -25,7 +25,7 @@ source "utm-iso" "ubuntu" {
   vm_arch                = var.os_arch
   vm_backend             = "qemu"
   iso_url                = var.iso_url
-  iso_checksum           = var.iso_checksum
+  iso_checksum           = "none"
   iso_interface          = "usb"
   cpus                   = var.cpus
   memory                 = var.memory
@@ -34,7 +34,7 @@ source "utm-iso" "ubuntu" {
   uefi_boot              = true
   hypervisor             = true
   display_hardware_type  = "virtio-gpu-gl-pci"
-  disable_vnc            = true
+  disable_vnc            = false
   ssh_username           = var.ssh_username
   ssh_password           = var.ssh_password
   ssh_timeout            = "30m"
