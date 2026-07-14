@@ -33,7 +33,6 @@ source "utm-iso" "ubuntu" {
   hard_drive_interface   = "nvme"
   uefi_boot              = true
   hypervisor             = true
-  display_hardware_type  = "virtio-ramfb-gl"
   disable_vnc            = false
   display_nopause        = true
   boot_nopause           = true
@@ -42,7 +41,7 @@ source "utm-iso" "ubuntu" {
   ssh_password           = var.ssh_password
   ssh_timeout            = "30m"
   http_directory         = "${path.root}/http"
-  boot_wait              = "3s"
+  boot_wait              = "10s"
   boot_command = [
     "c<wait>",
     "linux /casper/vmlinuz autoinstall ds=nocloud-net;s=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ ---<enter><wait5>",
