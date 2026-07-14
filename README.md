@@ -1,10 +1,9 @@
 # vagrant-jenkins-spinnaker
 
-> Supports Spinnaker 2026.2.2 and higher.
-
 Provision Jenkins and Spinnaker for CI/CD using Vagrant and Ansible.
 
-> Supports arm64 on UTM (Apple Silicon). Uses Ubuntu 26.04 LTS (Resolute Raccoon).
+> [!NOTE]
+> Supports Spinnaker 2026.2.2 and higher, arm64 on UTM (Apple Silicon) with Ubuntu 26.04 LTS (Resolute Raccoon).
 
 ## Requirements
 
@@ -17,7 +16,7 @@ At least the following hardware resources will be required on the host machine:
 |           |     |        |
 | TOTAL     |  4  | 8GB    |
 
-## Clone the GitHub Repository
+## Clone the Repository
 
 ```bash
 git clone https://github.com/ashleykleynhans/vagrant-jenkins-spinnaker.git
@@ -58,14 +57,12 @@ Before starting the VMs, build the Ubuntu 26.04 base box for UTM.
 
 ### GitHub Personal Access Token
 
-`packer init` downloads the UTM plugin from GitHub, which has a rate limit
-for unauthenticated requests. If you see a rate-limit error, create a
-[personal access token](https://github.com/settings/tokens/new) (no scopes
-needed) and export it:
-
-```bash
-export PACKER_GITHUB_API_TOKEN="your_token_here"
-```
+> [!IMPORTANT]
+> `packer init` downloads the UTM plugin from GitHub, which has a rate limit for unauthenticated requests. If you see a rate-limit error, create a [personal access token](https://github.com/settings/tokens/new) (no scopes needed) and export it:
+>
+> ```bash
+> export PACKER_GITHUB_API_TOKEN="your_token_here"
+> ```
 
 ### Build
 
@@ -79,7 +76,7 @@ cd ..
 vagrant box add builds/ashleykleynhans-ubuntu2604-arm64.box --name ashleykleynhans/ubuntu2604-arm64
 ```
 
-#### Build stages and expected output
+#### Build stages
 
 | Stage | What happens | Duration |
 |-------|-------------|----------|
@@ -91,10 +88,10 @@ vagrant box add builds/ashleykleynhans-ubuntu2604-arm64.box --name ashleykleynha
 | Connected via SSH | Autoinstall completed, Packer connects and runs provisioner scripts | 1-3 min |
 | Post-processor | Packages the VM into a Vagrant box file (`builds/`) | 1-3 min |
 
-The `Waiting for SSH to become available...` stage is the longest: the Ubuntu
-installer partitions the disk, downloads packages, and reboots. This is silent
-in the Packer output. You can watch progress in the UTM app window.
+> [!TIP]
+> The `Waiting for SSH to become available...` stage is the longest and is silent in Packer output. You can watch the installer progress in the UTM app window.
 
+> [!NOTE]
 > Total build time: 15-35 minutes depending on internet speed and CPU.
 
 ## Managing the Stack
