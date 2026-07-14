@@ -33,8 +33,11 @@ source "utm-iso" "ubuntu" {
   hard_drive_interface   = "nvme"
   uefi_boot              = true
   hypervisor             = true
-  display_hardware_type  = "virtio-gpu-gl-pci"
+  display_hardware_type  = "virtio-ramfb-gl"
   disable_vnc            = false
+  display_nopause        = true
+  boot_nopause           = true
+  export_nopause         = true
   ssh_username           = var.ssh_username
   ssh_password           = var.ssh_password
   ssh_timeout            = "30m"
