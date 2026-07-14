@@ -28,7 +28,7 @@
         name: "{{ item }}"
         state: present
       loop:
-        - openjdk-11-jre-headless
+        - openjdk-17-jre-headless
         - jenkins
 
     - name: Start Jenkins

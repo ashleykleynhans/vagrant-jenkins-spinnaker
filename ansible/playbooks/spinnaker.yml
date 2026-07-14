@@ -3,8 +3,8 @@
   become: true
 
   environment:
-    JAVA_HOME: "/usr/lib/jvm/java-11-openjdk-{{ vm_architecture }}"
-    PATH: "{{ ansible_env.PATH }}:/usr/lib/jvm/java-11-openjdk-{{ vm_architecture }}/bin"
+    JAVA_HOME: "/usr/lib/jvm/java-17-openjdk-{{ vm_architecture }}"
+    PATH: "{{ ansible_env.PATH }}:/usr/lib/jvm/java-17-openjdk-{{ vm_architecture }}/bin"
     TERM: vt100
 
   tasks:

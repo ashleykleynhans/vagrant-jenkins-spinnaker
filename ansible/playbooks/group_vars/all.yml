@@ -1,6 +1,6 @@
 ---
-vm_architecture: amd64
+vm_architecture: arm64
 spinnaker_version: 2026.2.2
 spinnaker_storage_type: minio
 spinnaker_timezone: America/Los_Angeles
-jvm_path: /usr/lib/jvm/java-11-openjdk-amd64/bin
+jvm_path: /usr/lib/jvm/java-17-openjdk-arm64/bin

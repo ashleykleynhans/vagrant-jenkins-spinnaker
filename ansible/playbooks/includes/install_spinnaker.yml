@@ -13,7 +13,7 @@
 
 - name: Install Java
   ansible.builtin.apt:
-    name: openjdk-11-jre-headless
+    name: openjdk-17-jre-headless
     state: present
 
 - name: Install Halyard
