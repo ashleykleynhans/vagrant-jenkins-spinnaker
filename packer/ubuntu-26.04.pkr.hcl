@@ -14,15 +14,16 @@ variable "iso_url" { type = string }
 variable "iso_checksum" { type = string }
 variable "cpus" { type = number }
 variable "memory" { type = number }
-variable "disk_size" { type = string }
+variable "disk_size" { type = number }
 variable "ssh_username" { type = string }
 variable "ssh_password" { type = string }
-variable "headless" { type = bool }
 variable "box_name" { type = string }
 variable "box_version" { type = string }
 
 source "utm-iso" "ubuntu" {
   vm_name                = "${var.os_name}-${var.os_version}-${var.os_arch}"
+  vm_arch                = var.os_arch
+  vm_backend             = "qemu"
   iso_url                = var.iso_url
   iso_checksum           = var.iso_checksum
   iso_interface          = "usb"
@@ -33,7 +34,7 @@ source "utm-iso" "ubuntu" {
   uefi_boot              = true
   hypervisor             = true
   display_hardware_type  = "virtio-gpu-gl-pci"
-  headless               = var.headless
+  disable_vnc            = true
   ssh_username           = var.ssh_username
   ssh_password           = var.ssh_password
   ssh_timeout            = "30m"
@@ -46,6 +47,7 @@ source "utm-iso" "ubuntu" {
     "boot<enter>"
   ]
   shutdown_command       = "echo '${var.ssh_password}' | sudo -S shutdown -P now"
+  keep_registered        = true
 }
 
 build {
