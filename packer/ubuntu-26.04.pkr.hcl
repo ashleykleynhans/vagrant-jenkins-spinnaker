@@ -21,7 +21,7 @@ variable "box_name" { type = string }
 variable "box_version" { type = string }
 
 source "utm-iso" "ubuntu" {
-  vm_name                = "${var.os_name}-${var.os_version}-${var.os_arch}"
+  vm_name                = "${var.os_name}-${var.os_version}-${var.os_arch}-${formatdate("YYYYMMDDhhmm", timestamp())}"
   vm_arch                = var.os_arch
   vm_backend             = "qemu"
   iso_url                = var.iso_url
