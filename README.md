@@ -79,8 +79,23 @@ cd ..
 vagrant box add builds/ashleykleynhans-ubuntu2604-arm64.box --name ashleykleynhans/ubuntu2604-arm64
 ```
 
-> Building the box downloads the Ubuntu 26.04 server ISO (~2.5 GB) and takes 15-30 minutes
-> depending on your internet connection and CPU.
+#### Build stages and expected output
+
+| Stage | What happens | Duration |
+|-------|-------------|----------|
+| Retrieving ISO | Downloads Ubuntu 26.04 server ISO (~2.9 GB) | 1-5 min |
+| Creating virtual machine | UTM creates the VM, mounts ISOs, sets up networking | < 1 min |
+| Waiting for boot | VM powers on, UEFI firmware initializes | ~10 seconds |
+| Typing boot commands over VNC | Packer sends the autoinstall kernel command line | < 1 min |
+| Waiting for SSH | Ubuntu autoinstall runs: partitioning, package install, first reboot | **10-25 min** |
+| Connected via SSH | Autoinstall completed, Packer connects and runs provisioner scripts | 1-3 min |
+| Post-processor | Packages the VM into a Vagrant box file (`builds/`) | 1-3 min |
+
+The `Waiting for SSH to become available...` stage is the longest: the Ubuntu
+installer partitions the disk, downloads packages, and reboots. This is silent
+in the Packer output. You can watch progress in the UTM app window.
+
+> Total build time: 15-35 minutes depending on internet speed and CPU.
 
 ## Managing the Stack
 
