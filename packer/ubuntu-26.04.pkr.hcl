@@ -39,7 +39,7 @@ source "utm-iso" "ubuntu" {
   export_nopause         = true
   ssh_username           = var.ssh_username
   ssh_password           = var.ssh_password
-  ssh_timeout            = "30m"
+  ssh_timeout            = "45m"
   http_directory         = "${path.root}/http"
   boot_wait              = "10s"
   boot_command = [
@@ -49,7 +49,6 @@ source "utm-iso" "ubuntu" {
     "boot<enter>"
   ]
   shutdown_command       = "echo '${var.ssh_password}' | sudo -S shutdown -P now"
-  keep_registered        = true
 }
 
 build {
