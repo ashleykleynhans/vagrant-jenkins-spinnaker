@@ -1,0 +1,13 @@
+os_name       = "ubuntu"
+os_version    = "26.04"
+os_arch       = "aarch64"
+iso_url       = "https://releases.ubuntu.com/26.04/ubuntu-26.04-live-server-arm64.iso"
+iso_checksum  = "sha256:https://releases.ubuntu.com/26.04/SHA256SUMS"
+cpus          = 2
+memory        = 4096
+disk_size     = "30G"
+ssh_username  = "vagrant"
+ssh_password  = "vagrant"
+headless      = true
+box_name      = "ashleykleynhans/ubuntu2604-arm64"
+box_version   = "0.0.1"

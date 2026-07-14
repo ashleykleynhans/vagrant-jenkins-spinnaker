@@ -1,4 +1,4 @@
-IMAGE = "generic/ubuntu2604"
+IMAGE = "ashleykleynhans/ubuntu2604-arm64"
 
 Vagrant.configure("2") do |config|
     config.vm.box = IMAGE
@@ -6,10 +6,10 @@ Vagrant.configure("2") do |config|
 
     # Provision Jenkins
     config.vm.define "jenkins" do |jenkins|
-        jenkins.vm.provider "vmware_desktop" do |vmx|
-            vmx.vmx["displayname"] = "jenkins"
-            vmx.vmx["memsize"] = "2048"
-            vmx.vmx["numvcpus"] = "2"
+        jenkins.vm.provider "utm" do |u|
+            u.name = "jenkins"
+            u.memory = 2048
+            u.cpus = 2
         end
         jenkins.vm.hostname = "jenkins"
         jenkins.vm.network :private_network, ip: "10.10.10.10"
@@ -24,10 +24,10 @@ Vagrant.configure("2") do |config|
 
     # Provision Spinnaker
     config.vm.define "spinnaker" do |spinnaker|
-        spinnaker.vm.provider "vmware_desktop" do |vmx|
-            vmx.vmx["displayname"] = "spinnaker"
-            vmx.vmx["memsize"] = "6144"
-            vmx.vmx["numvcpus"] = "2"
+        spinnaker.vm.provider "utm" do |u|
+            u.name = "spinnaker"
+            u.memory = 6144
+            u.cpus = 2
         end
         spinnaker.vm.hostname = "spinnaker"
         spinnaker.vm.network :private_network, ip: "10.10.10.20"

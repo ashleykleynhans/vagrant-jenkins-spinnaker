@@ -1,2 +1,5 @@
 .vagrant
 .idea
+builds/
+packer/packer_cache/
+

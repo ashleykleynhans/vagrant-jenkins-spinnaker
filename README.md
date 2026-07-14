@@ -4,7 +4,7 @@
 
 Provision Jenkins and Spinnaker for CI/CD using Vagrant and Ansible.
 
-> Supports arm64 on VMware Fusion (Apple Silicon). Uses Ubuntu 26.04 LTS (Resolute Raccoon).
+> Supports arm64 on UTM (Apple Silicon). Uses Ubuntu 26.04 LTS (Resolute Raccoon).
 
 ## Requirements
 
@@ -17,48 +17,58 @@ At least the following hardware resources will be required on the host machine:
 |           |     |        |
 | TOTAL     |  4  | 8GB    |
 
-You will also need VMware Fusion (free for personal use) installed on your Mac.
-
 ## Clone the GitHub Repository
-
-Run the following command from the terminal to clone the GitHub Repository:
 
 ```bash
 git clone https://github.com/ashleykleynhans/vagrant-jenkins-spinnaker.git
+cd vagrant-jenkins-spinnaker
 ```
 
 ## Install Required Software
 
-Begin by installing the homebrew package manager.
-
-Run the following command from the terminal to install homebrew:
-
-```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
-
-All of the remaining software can be installed by cloning the git repository and
-running the setup script provided.
-
-Run the setup script from the terminal to install the required software:
+### Option 1: Automated setup
 
 ```bash
 ./setup.sh
 ```
 
-The setup script installs:
+The setup script installs: Homebrew, UTM, Vagrant, the vagrant-utm plugin, Packer, and Ansible.
 
-- Vagrant
-- Ansible
-- Vagrant VMware utility (for VMware Fusion integration)
-
-## Managing the Stack
-
-Begin by ensuring that you are in the directory which the Github Repository was cloned to:
+### Option 2: Manual setup
 
 ```bash
-cd vagrant-jenkins-spinnaker
+# Install UTM
+brew install --cask utm
+
+# Install Vagrant and the UTM plugin
+brew install vagrant
+vagrant plugin install vagrant_utm
+
+# Install Packer
+brew install packer
+
+# Install Ansible
+brew install ansible
 ```
+
+## Build the Base Box
+
+Before starting the VMs, build the Ubuntu 26.04 base box for UTM:
+
+```bash
+cd packer
+packer init ubuntu-26.04.pkr.hcl
+packer build -var-file=ubuntu-26.04.auto.pkrvars.hcl ubuntu-26.04.pkr.hcl
+cd ..
+
+# Register the built box with Vagrant
+vagrant box add builds/ashleykleynhans-ubuntu2604-arm64.box --name ashleykleynhans/ubuntu2604-arm64
+```
+
+> Building the box downloads the Ubuntu 26.04 server ISO (~2.5 GB) and takes 15-30 minutes
+> depending on your internet connection and CPU.
+
+## Managing the Stack
 
 ### Starting the Stack
 

@@ -4,7 +4,8 @@
 
 - Bump Spinnaker to version 2026.2.2
 - Upgrade base OS to Ubuntu 26.04 LTS (Resolute Raccoon)
-- Switch from VirtualBox to VMware Fusion for Apple Silicon (arm64)
+- Switch from VirtualBox/VMware to UTM (free virtualization for macOS)
+- Add Packer template for building Ubuntu 26.04 UTM box
 - Upgrade Java from 11 to 17
 
 ## [1.34.1] - 2024-06-11

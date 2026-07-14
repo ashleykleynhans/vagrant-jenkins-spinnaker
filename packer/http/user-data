@@ -1,0 +1,29 @@
+#cloud-config
+autoinstall:
+  version: 1
+  locale: en_US.UTF-8
+  keyboard:
+    layout: us
+  identity:
+    hostname: ubuntu-server
+    username: vagrant
+    password: "$6$/g/eUQjkHn/HsCTg$0ArRmjzF2.aq9XRIeM4EfWeVfFV3cXUkrXKNcnZRMHbPtwPHeGNLbqCee9Z4sYsGlfF8qM7YSCAtavPntBPCS0"
+  ssh:
+    install-server: true
+    allow-pw: true
+  storage:
+    layout:
+      name: lvm
+      sizing-policy: all
+  packages:
+    - openssh-server
+    - curl
+    - wget
+    - net-tools
+    - jq
+  timezone: Etc/UTC
+  late-commands:
+    - echo 'vagrant ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/99_vagrant
+    - chmod 440 /target/etc/sudoers.d/99_vagrant
+    - sed -i 's/^#PermitRootLogin.*/PermitRootLogin no/' /target/etc/ssh/sshd_config.d/60-cloudimg-settings.conf
+    - sed -i 's/^PasswordAuthentication.*/PasswordAuthentication yes/' /target/etc/ssh/sshd_config.d/60-cloudimg-settings.conf
