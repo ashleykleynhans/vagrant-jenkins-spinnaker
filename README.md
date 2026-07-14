@@ -54,7 +54,20 @@ brew install ansible
 
 ## Build the Base Box
 
-Before starting the VMs, build the Ubuntu 26.04 base box for UTM:
+Before starting the VMs, build the Ubuntu 26.04 base box for UTM.
+
+### GitHub Personal Access Token
+
+`packer init` downloads the UTM plugin from GitHub, which has a rate limit
+for unauthenticated requests. If you see a rate-limit error, create a
+[personal access token](https://github.com/settings/tokens/new) (no scopes
+needed) and export it:
+
+```bash
+export PACKER_GITHUB_API_TOKEN="your_token_here"
+```
+
+### Build
 
 ```bash
 cd packer
