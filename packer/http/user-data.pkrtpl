@@ -1,0 +1,35 @@
+#cloud-config
+hostname: ubuntu-server
+manage_etc_hosts: true
+locale: en_US.UTF-8
+timezone: Etc/UTC
+
+users:
+  - name: ${ssh_username}
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: sudo
+    shell: /bin/bash
+    lock_passwd: false
+    passwd: "$6$IVclZry2v8cMwdJs$Gzm5tFnqcpcYuD2bcjRebNkBol518qgSchc7Mj/kuxBkMw9ml02OSKLt5GSgsOkfyk1ABLOXe0cCAfFMYOfsu0"
+
+ssh_pwauth: true
+
+package_update: true
+package_upgrade: true
+
+packages:
+  - qemu-guest-agent
+  - spice-vdagent
+  - curl
+  - wget
+  - jq
+
+runcmd:
+  - systemctl enable ssh
+  - systemctl enable qemu-guest-agent
+  - echo '${ssh_username} ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/99_${ssh_username}
+  - chmod 440 /etc/sudoers.d/99_${ssh_username}
+
+power_state:
+  mode: reboot
+  timeout: 60

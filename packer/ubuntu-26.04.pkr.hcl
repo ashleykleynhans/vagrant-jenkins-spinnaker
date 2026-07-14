@@ -20,39 +20,35 @@ variable "ssh_password" { type = string }
 variable "box_name" { type = string }
 variable "box_version" { type = string }
 
-source "utm-iso" "ubuntu" {
+source "utm-cloud" "ubuntu" {
   vm_name                = "${var.os_name}-${var.os_version}-${var.os_arch}-${formatdate("YYYYMMDDhhmm", timestamp())}"
   vm_arch                = var.os_arch
   vm_backend             = "qemu"
   iso_url                = var.iso_url
   iso_checksum           = var.iso_checksum
-  iso_interface          = "usb"
   cpus                   = var.cpus
   memory                 = var.memory
   disk_size              = var.disk_size
   hard_drive_interface   = "nvme"
   uefi_boot              = true
   hypervisor             = true
-  disable_vnc            = false
+  cd_content = {
+    "user-data" = templatefile("${path.root}/http/user-data.pkrtpl", { ssh_username = var.ssh_username, ssh_password = var.ssh_password })
+    "meta-data" = file("${path.root}/http/meta-data")
+  }
+  cd_label               = "cidata"
+  resize_cloud_image     = true
+  ssh_username           = var.ssh_username
+  ssh_password           = var.ssh_password
+  ssh_timeout            = "10m"
+  shutdown_command       = "echo '${var.ssh_password}' | sudo -S shutdown -P now"
   display_nopause        = true
   boot_nopause           = true
   export_nopause         = true
-  ssh_username           = var.ssh_username
-  ssh_password           = var.ssh_password
-  ssh_timeout            = "45m"
-  http_directory         = "${path.root}/http"
-  boot_wait              = "10s"
-  boot_command = [
-    "c<wait>",
-    "linux /casper/vmlinuz autoinstall ds=nocloud-net;s=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ ---<enter><wait5>",
-    "initrd /casper/initrd<enter><wait5>",
-    "boot<enter>"
-  ]
-  shutdown_command       = "echo '${var.ssh_password}' | sudo -S shutdown -P now"
 }
 
 build {
-  sources = ["source.utm-iso.ubuntu"]
+  sources = ["source.utm-cloud.ubuntu"]
 
   provisioner "shell" {
     scripts = [

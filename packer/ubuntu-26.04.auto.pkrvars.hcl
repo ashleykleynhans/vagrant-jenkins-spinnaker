@@ -1,8 +1,8 @@
 os_name       = "ubuntu"
 os_version    = "26.04"
 os_arch       = "aarch64"
-iso_url       = "https://cdimage.ubuntu.com/ubuntu/releases/resolute/release/ubuntu-26.04-live-server-arm64.iso"
-iso_checksum  = "sha256:c9aa567e6560b2eddae3af03fc686002e35b6fee96f97fd5df3271e846439fdd"
+iso_url       = "https://cloud-images.ubuntu.com/releases/26.04/release/ubuntu-26.04-server-cloudimg-arm64.img"
+iso_checksum  = "none"
 cpus          = 2
 memory        = 4096
 disk_size     = 30000
