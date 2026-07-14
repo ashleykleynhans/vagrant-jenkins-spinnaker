@@ -25,7 +25,7 @@ source "utm-iso" "ubuntu" {
   vm_arch                = var.os_arch
   vm_backend             = "qemu"
   iso_url                = var.iso_url
-  iso_checksum           = "none"
+  iso_checksum           = var.iso_checksum
   iso_interface          = "usb"
   cpus                   = var.cpus
   memory                 = var.memory
