@@ -1,7 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-- {{ spinnaker_kustomize_url }}
+- https://github.com/spinnaker/spinnaker.git/spinnaker-kustomize?ref=spinnaker-release-{{ spinnaker_version }}
 namespace: spinnaker
 
 images:

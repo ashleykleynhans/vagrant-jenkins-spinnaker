@@ -7,6 +7,8 @@
 - Switch from VirtualBox/VMware to UTM (free virtualization for macOS)
 - Add Packer template for building Ubuntu 26.04 UTM box
 - Upgrade Java from 11 to 17
+- Replace Halyard with k3s Kubernetes deployment (Halyard is deprecated)
+- Use Spinnaker kustomize manifests with image tags pinned to 2026.2.2
 
 ## [1.34.1] - 2024-06-11
 
