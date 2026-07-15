@@ -1,2 +1,5 @@
 ---
 vm_architecture: arm64
+spinnaker_version: 2026.2.2
+spinnaker_release_tag: spinnaker-release-2026.2.2
+spinnaker_kustomize_url: https://github.com/spinnaker/spinnaker.git/spinnaker-kustomize?ref=spinnaker-release-2026.2.2

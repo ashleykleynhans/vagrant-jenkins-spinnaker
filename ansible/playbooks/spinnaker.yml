@@ -13,11 +13,6 @@
     - name: Include task to install useful packages
       ansible.builtin.include_tasks: includes/install_useful_packages.yml
 
-    - name: Install git
-      ansible.builtin.apt:
-        name: git
-        state: present
-
     - name: Include task to install Docker
       ansible.builtin.include_tasks: includes/install_docker.yml
 
@@ -54,13 +49,6 @@
         mode: "0600"
         remote_src: true
 
-    - name: Clone Spinnaker repo
-      ansible.builtin.git:
-        repo: https://github.com/spinnaker/spinnaker.git
-        dest: /opt/spinnaker
-        version: v2026.2.2
-        depth: 1
-
     - name: Create overlay directory
       ansible.builtin.file:
         path: /opt/spinnaker-overlay/files
@@ -68,14 +56,6 @@
         owner: vagrant
         group: vagrant
         mode: "0755"
-
-    - name: Copy kustomization overlay
-      ansible.builtin.copy:
-        src: ../files/spinnaker-kustomization.yml
-        dest: /opt/spinnaker-overlay/kustomization.yml
-        owner: vagrant
-        group: vagrant
-        mode: "0644"
 
     - name: Copy Spinnaker config files
       ansible.builtin.copy:
@@ -91,6 +71,14 @@
           dest: /opt/spinnaker-overlay/files/front50-local-k8s.yml
         - src: ../files/gate-local.yml
           dest: /opt/spinnaker-overlay/files/gate-local.yml
+
+    - name: Generate kustomization.yml from template
+      ansible.builtin.template:
+        src: ../templates/spinnaker-kustomization.yml.j2
+        dest: /opt/spinnaker-overlay/kustomization.yml
+        owner: vagrant
+        group: vagrant
+        mode: "0644"
 
     - name: Build and apply Spinnaker manifests
       ansible.builtin.shell:
