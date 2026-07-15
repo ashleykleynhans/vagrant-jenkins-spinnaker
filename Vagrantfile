@@ -26,7 +26,7 @@ Vagrant.configure("2") do |config|
     config.vm.define "spinnaker" do |spinnaker|
         spinnaker.vm.provider "utm" do |u|
             u.name = "spinnaker"
-            u.memory = 6144
+            u.memory = 8192
             u.cpus = 2
         end
         spinnaker.vm.hostname = "spinnaker"

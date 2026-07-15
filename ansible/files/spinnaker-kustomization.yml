@@ -1,0 +1,43 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- /opt/spinnaker/spinnaker-kustomize
+namespace: spinnaker
+
+images:
+- name: ghcr.io/spinnaker/clouddriver
+  newTag: 2026.2.2
+- name: ghcr.io/spinnaker/deck
+  newTag: 2026.2.2
+- name: ghcr.io/spinnaker/echo
+  newTag: 2026.2.2
+- name: ghcr.io/spinnaker/fiat
+  newTag: 2026.2.2
+- name: ghcr.io/spinnaker/front50
+  newTag: 2026.2.2
+- name: ghcr.io/spinnaker/gate
+  newTag: 2026.2.2
+- name: ghcr.io/spinnaker/igor
+  newTag: 2026.2.2
+- name: ghcr.io/spinnaker/kayenta
+  newTag: 2026.2.2
+- name: ghcr.io/spinnaker/keel
+  newTag: 2026.2.2
+- name: ghcr.io/spinnaker/orca
+  newTag: 2026.2.2
+- name: ghcr.io/spinnaker/rosco
+  newTag: 2026.2.2
+
+configMapGenerator:
+- behavior: merge
+  name: clouddriver
+  files:
+  - files/clouddriver-local.yml
+- behavior: merge
+  name: front50
+  files:
+  - files/front50-local-k8s.yml
+- behavior: merge
+  name: gate
+  files:
+  - files/gate-local.yml

@@ -3,8 +3,7 @@
   become: true
 
   environment:
-    JAVA_HOME: "/usr/lib/jvm/java-17-openjdk-{{ vm_architecture }}"
-    PATH: "{{ ansible_env.PATH }}:/usr/lib/jvm/java-17-openjdk-{{ vm_architecture }}/bin"
+    KUBECONFIG: /etc/rancher/k3s/k3s.yaml
     TERM: vt100
 
   tasks:
@@ -14,26 +13,106 @@
     - name: Include task to install useful packages
       ansible.builtin.include_tasks: includes/install_useful_packages.yml
 
+    - name: Install git
+      ansible.builtin.apt:
+        name: git
+        state: present
+
     - name: Include task to install Docker
       ansible.builtin.include_tasks: includes/install_docker.yml
 
     - name: Include task to install Minio as the S3 persistent storage backend
       ansible.builtin.include_tasks: includes/install_minio.yml
 
-    - name: Include task to install Spinnaker
-      ansible.builtin.include_tasks: includes/install_spinnaker.yml
+    - name: Install k3s
+      ansible.builtin.shell:
+        cmd: curl -sfL https://get.k3s.io | sh -
+        creates: /usr/local/bin/k3s
 
-    - name: Include task to configure Spinnaker
-      ansible.builtin.include_tasks: includes/configure_spinnaker.yml
+    - name: Wait for k3s node to be ready
+      ansible.builtin.shell:
+        cmd: k3s kubectl get nodes | grep -q " Ready"
+      register: node_ready
+      until: node_ready.rc == 0
+      retries: 30
+      delay: 10
 
-    - name: Include task to apply Spinnaker deployment
-      ansible.builtin.include_tasks: includes/apply_spinnaker_deployment.yml
+    - name: Create .kube directory for vagrant
+      ansible.builtin.file:
+        path: /home/vagrant/.kube
+        state: directory
+        owner: vagrant
+        group: vagrant
+        mode: "0755"
 
-    - name: Include task to install Nginx
-      ansible.builtin.include_tasks: includes/install_nginx.yml
+    - name: Copy kubeconfig for vagrant
+      ansible.builtin.copy:
+        src: /etc/rancher/k3s/k3s.yaml
+        dest: /home/vagrant/.kube/config
+        owner: vagrant
+        group: vagrant
+        mode: "0600"
+        remote_src: true
 
-  handlers:
-    - name: restart nginx
-      ansible.builtin.service:
-        name: nginx
-        state: restarted
+    - name: Clone Spinnaker repo
+      ansible.builtin.git:
+        repo: https://github.com/spinnaker/spinnaker.git
+        dest: /opt/spinnaker
+        version: v2026.2.2
+        depth: 1
+
+    - name: Create overlay directory
+      ansible.builtin.file:
+        path: /opt/spinnaker-overlay/files
+        state: directory
+        owner: vagrant
+        group: vagrant
+        mode: "0755"
+
+    - name: Copy kustomization overlay
+      ansible.builtin.copy:
+        src: ../files/spinnaker-kustomization.yml
+        dest: /opt/spinnaker-overlay/kustomization.yml
+        owner: vagrant
+        group: vagrant
+        mode: "0644"
+
+    - name: Copy Spinnaker config files
+      ansible.builtin.copy:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+        owner: vagrant
+        group: vagrant
+        mode: "0644"
+      loop:
+        - src: ../files/clouddriver-local.yml
+          dest: /opt/spinnaker-overlay/files/clouddriver-local.yml
+        - src: ../files/front50-local-k8s.yml
+          dest: /opt/spinnaker-overlay/files/front50-local-k8s.yml
+        - src: ../files/gate-local.yml
+          dest: /opt/spinnaker-overlay/files/gate-local.yml
+
+    - name: Build and apply Spinnaker manifests
+      ansible.builtin.shell:
+        cmd: |
+          set -o pipefail
+          k3s kubectl kustomize /opt/spinnaker-overlay | k3s kubectl apply -f -
+      register: spinnaker_apply
+      changed_when: "'created' in spinnaker_apply.stdout or 'configured' in spinnaker_apply.stdout"
+
+    - name: Wait for Spinnaker pods
+      ansible.builtin.shell:
+        cmd: k3s kubectl wait --for=condition=Ready pods --all -n spinnaker --timeout=900s
+      register: pods_ready
+      until: pods_ready.rc == 0
+      retries: 3
+      delay: 30
+
+    - name: Show pod status
+      ansible.builtin.shell:
+        cmd: k3s kubectl get pods -n spinnaker
+      register: pod_status
+
+    - name: Print pod status
+      ansible.builtin.debug:
+        msg: "{{ pod_status.stdout_lines }}"

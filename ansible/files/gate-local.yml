@@ -1,0 +1,17 @@
+security:
+  basicform:
+    enabled: true
+  user:
+    name: admin
+    password: admin
+    role: admin
+
+server:
+  servlet:
+    context-path: /api/v1
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

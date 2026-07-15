@@ -3,7 +3,11 @@
 Provision Jenkins and Spinnaker for CI/CD using Vagrant and Ansible.
 
 > [!NOTE]
-> Supports Spinnaker 2026.2.2 and higher, arm64 on UTM (Apple Silicon) with Ubuntu 26.04 LTS (Resolute Raccoon).
+> Supports Spinnaker 2026.2.2 on k3s Kubernetes, arm64 on UTM (Apple Silicon) with Ubuntu 26.04 LTS (Resolute Raccoon).
+
+Spinnaker is deployed as a Kubernetes application on a single-node k3s cluster
+using the official [Spinnaker kustomize](https://github.com/spinnaker/spinnaker/tree/main/spinnaker-kustomize)
+manifests. This replaces the deprecated Halyard-based installation.
 
 ## Requirements
 
@@ -12,9 +16,9 @@ At least the following hardware resources will be required on the host machine:
 | VM        | CPU | Memory |
 |-----------|-----|--------|
 | jenkins   |  2  | 2GB    |
-| spinnaker |  2  | 6GB    |
+| spinnaker |  2  | 8GB    |
 |           |     |        |
-| TOTAL     |  4  | 8GB    |
+| TOTAL     |  4  | 10GB   |
 
 ## Clone the Repository
 

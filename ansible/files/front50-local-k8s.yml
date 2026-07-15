@@ -1,0 +1,7 @@
+spinnaker:
+  s3:
+    enabled: true
+    endpoint: http://127.0.0.1:9090
+    region: us-east-1
+    pathStyleAccess: true
+    versioning: false
