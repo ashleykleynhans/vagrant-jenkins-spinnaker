@@ -12,17 +12,18 @@
     - name: Include task to install docker
       ansible.builtin.include_tasks: includes/install_docker.yml
 
-    - name: Download and dearmor Jenkins GPG key
+    - name: Import and dearmor Jenkins GPG key from keyserver
       ansible.builtin.shell:
         cmd: |
           set -o pipefail
-          curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | \
-            gpg --dearmor --yes -o /usr/share/keyrings/jenkins.gpg
-        creates: /usr/share/keyrings/jenkins.gpg
+          gpg --keyserver keyserver.ubuntu.com --recv-keys 7198F4B714ABFC68
+          gpg --export 7198F4B714ABFC68 > /usr/share/keyrings/jenkins-keyring.gpg
+          chmod 644 /usr/share/keyrings/jenkins-keyring.gpg
+        creates: /usr/share/keyrings/jenkins-keyring.gpg
 
     - name: Set Jenkins apt repository
       ansible.builtin.apt_repository:
-        repo: deb [signed-by=/usr/share/keyrings/jenkins.gpg] https://pkg.jenkins.io/debian-stable binary/
+        repo: deb [signed-by=/usr/share/keyrings/jenkins-keyring.gpg] https://pkg.jenkins.io/debian-stable binary/
         filename: jenkins
         state: present
 
