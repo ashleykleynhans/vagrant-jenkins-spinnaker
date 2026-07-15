@@ -67,8 +67,6 @@
       loop:
         - src: ../files/spinnaker-local.yml
           dest: /opt/spinnaker-overlay/files/spinnaker-local.yml
-        - src: ../files/settings-local.js
-          dest: /opt/spinnaker-overlay/files/settings-local.js
         - src: ../files/clouddriver-local.yml
           dest: /opt/spinnaker-overlay/files/clouddriver-local.yml
         - src: ../files/front50-local-k8s.yml
@@ -80,6 +78,14 @@
       ansible.builtin.template:
         src: ../templates/spinnaker-kustomization.yml.j2
         dest: /opt/spinnaker-overlay/kustomization.yml
+        owner: vagrant
+        group: vagrant
+        mode: "0644"
+
+    - name: Generate settings-local.js from template
+      ansible.builtin.template:
+        src: ../templates/settings-local.js.j2
+        dest: /opt/spinnaker-overlay/files/settings-local.js
         owner: vagrant
         group: vagrant
         mode: "0644"
