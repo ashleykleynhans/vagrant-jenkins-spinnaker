@@ -65,6 +65,8 @@
         group: vagrant
         mode: "0644"
       loop:
+        - src: ../files/spinnaker-local.yml
+          dest: /opt/spinnaker-overlay/files/spinnaker-local.yml
         - src: ../files/clouddriver-local.yml
           dest: /opt/spinnaker-overlay/files/clouddriver-local.yml
         - src: ../files/front50-local-k8s.yml

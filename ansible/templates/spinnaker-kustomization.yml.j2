@@ -30,6 +30,10 @@ images:
 
 configMapGenerator:
 - behavior: merge
+  name: spinnaker
+  files:
+  - files/spinnaker-local.yml
+- behavior: merge
   name: clouddriver
   files:
   - files/clouddriver-local.yml

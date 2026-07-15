@@ -1,0 +1,3 @@
+services:
+  deck:
+    baseUrl: http://localhost:9000/
