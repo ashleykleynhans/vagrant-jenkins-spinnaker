@@ -16,7 +16,8 @@ retry_apt() {
 }
 
 # Disable interactive apt prompts
-echo 'export DEBIAN_FRONTEND=noninteractive' | sudo tee -a /etc/environment
+export DEBIAN_FRONTEND=noninteractive
+echo 'DEBIAN_FRONTEND=noninteractive' | sudo tee -a /etc/environment > /dev/null
 
 # Disable release upgrades
 sudo sed -i 's/^Prompt=.*/Prompt=never/' /etc/update-manager/release-upgrades

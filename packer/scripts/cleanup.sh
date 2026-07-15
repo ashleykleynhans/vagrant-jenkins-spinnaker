@@ -2,7 +2,14 @@
 
 HOME_DIR="${HOME_DIR:-/home/vagrant}"
 
-# Install UTM guest support
+# Disable interactive apt prompts (scoped to this shell, safe)
+export DEBIAN_FRONTEND=noninteractive
+
+# Fix any broken dpkg state before proceeding
+sudo dpkg --configure -a || true
+sudo apt-get -y -f install || true
+
+# Install UTM guest support (allow failures, non-critical packages)
 sudo apt-get -y install --no-install-recommends spice-vdagent qemu-guest-agent spice-webdavd || true
 
 # Install Vagrant SSH key (runs as vagrant, targets vagrant's home)
@@ -22,9 +29,9 @@ chmod -R go-rwsx "$HOME_DIR/.ssh"
 echo 'vagrant ALL=(ALL) NOPASSWD:ALL' | sudo tee /etc/sudoers.d/99_vagrant > /dev/null
 sudo chmod 440 /etc/sudoers.d/99_vagrant
 
-# Cleanup
-sudo apt-get -y autoremove
-sudo apt-get -y clean
+# Cleanup (allow failures on non-critical cleanup steps)
+sudo apt-get -y autoremove || true
+sudo apt-get -y clean || true
 
 # Remove udev persistent rules
 sudo rm -rf /etc/udev/rules.d/70-persistent-net.rules || true
