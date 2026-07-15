@@ -38,6 +38,10 @@ configMapGenerator:
   files:
   - files/clouddriver-local.yml
 - behavior: merge
+  name: echo
+  files:
+  - files/echo-local.yml
+- behavior: merge
   name: front50
   files:
   - files/front50-local-k8s.yml
@@ -45,3 +49,11 @@ configMapGenerator:
   name: gate
   files:
   - files/gate-local.yml
+- behavior: merge
+  name: igor
+  files:
+  - files/igor-local.yml
+- behavior: merge
+  name: orca
+  files:
+  - files/orca-local.yml

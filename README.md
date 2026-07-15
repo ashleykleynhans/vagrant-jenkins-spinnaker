@@ -101,6 +101,126 @@ vagrant box add builds/ashleykleynhans/ubuntu2604-arm64.box --name ashleykleynha
 > [!NOTE]
 > Total build time: 15-35 minutes depending on internet speed and CPU.
 
+## Architecture
+
+Two VMs are provisioned:
+
+```
+┌─────────────────────────────────────────────┐
+│ Host (Apple Silicon Mac)                    │
+│ ┌─────────────┐  ┌─────────────────────────┐│
+│ │ Jenkins VM  │  │ Spinnaker VM            ││
+│ │ 2GB / 2 CPU │  │ 12GB / 2 CPU            ││
+│ │             │  │                          ││
+│ │ Jenkins LTS │  │ ┌──────────┐ ┌────────┐ ││
+│ │ Docker      │  │ │ MySQL 8  │ │ Minio  │ ││
+│ │             │  │ └──────────┘ │(S3 API)│ ││
+│ │ Port 8080   │  │              └────────┘ ││
+│ └─────────────┘  │                          ││
+│                  │ ┌──────────────────────┐ ││
+│                  │ │ k3s single-node      │ ││
+│                  │ │  • clouddriver       │ ││
+│                  │ │  • deck              │ ││
+│                  │ │  • echo • fiat       │ ││
+│                  │ │  • front50 • gate    │ ││
+│                  │ │  • igor • kayenta    │ ││
+│                  │ │  • keel • orca       │ ││
+│                  │ │  • rosco • redis     │ ││
+│                  │ │  • Traefik ingress   │ ││
+│                  │ └──────────────────────┘ ││
+│                  │                          ││
+│                  │ Port 80  → Deck UI       ││
+│                  │ Port 80  → Gate API      ││
+│                  │ Port 9090 → Minio S3     ││
+│                  └──────────────────────────┘│
+└─────────────────────────────────────────────┘
+```
+
+### Services
+
+| Service | Role | Backend |
+|---------|------|---------|
+| **Jenkins** | CI server | Docker, Git |
+| **k3s** | Lightweight Kubernetes | containerd |
+| **Spinnaker** | CD platform (11 microservices) | Redis + MySQL + Minio S3 |
+| **MySQL 8** | SQL persistence | clouddriver, front50, orca, echo, igor |
+| **Minio** | S3-compatible object store | Docker container, port 9090 |
+| **Redis** | In-memory cache/queue | k3s StatefulSet |
+| **Traefik** | HTTP ingress controller | Built into k3s |
+
+### Networking
+
+Both VMs share a private network (`10.10.10.0/24`). Spinnaker communicates with
+Jenkins via the host-only network. Traefik listens on port 80 on the Spinnaker
+VM and routes `/` to Deck and `/api/v1` to Gate.
+
+## Project Layout
+
+```
+.
+├── Vagrantfile                   # VM definitions (box, provider, memory, IPs)
+├── setup.sh                      # Host software installer (Homebrew, UTM, etc.)
+├── packer/
+│   ├── ubuntu-26.04.pkr.hcl      # Packer template (utm-cloud builder)
+│   ├── ubuntu-26.04.auto.pkrvars.hcl  # Build variables (ISO URL, disk size, etc.)
+│   ├── http/
+│   │   ├── user-data.pkrtpl      # cloud-init: user, SSH keys, packages
+│   │   └── meta-data             # cloud-init: instance ID, hostname
+│   └── scripts/
+│       ├── apt-upgrade.sh        # Provisioner: apt update + dist-upgrade
+│       └── cleanup.sh            # Provisioner: guest tools, SSH key, cleanup
+└── ansible/
+    ├── files/
+    │   ├── clouddriver-local.yml  # S3 + MySQL config for clouddriver
+    │   ├── echo-local.yml         # MySQL config for echo
+    │   ├── front50-local-k8s.yml  # S3 + MySQL config for front50
+    │   ├── gate-local.yml         # Basic auth + API path for gate
+    │   ├── igor-local.yml         # MySQL config for igor
+    │   ├── orca-local.yml         # MySQL config for orca
+    │   ├── docker.json            # Docker daemon config
+    │   └── minio.service          # Minio systemd unit
+    ├── playbooks/
+    │   ├── group_vars/
+    │   │   └── all.yml            # Shared variables (architecture, version)
+    │   ├── includes/
+    │   │   ├── apt_over_https.yml
+    │   │   ├── install_docker.yml
+    │   │   ├── install_minio.yml
+    │   │   └── install_useful_packages.yml
+    │   ├── jenkins.yml            # Jenkins VM playbook
+    │   └── spinnaker.yml          # Spinnaker VM playbook (k3s + MySQL + kustomize)
+    └── templates/
+        └── spinnaker-kustomization.yml.j2  # kustomize overlay template
+```
+
+### How it works
+
+1. **`setup.sh`** installs macOS prerequisites: UTM, Vagrant, Packer, QEMU, Ansible
+2. **Packer** builds an Ubuntu 26.04 arm64 UTM box from the official cloud image,
+   pre-installing UTM guest tools and the Vagrant SSH key
+3. **`vagrant box add`** registers the built box locally
+4. **`vagrant up`** creates two VMs using the registered box
+5. **Ansible** provisions each VM:
+   - **Jenkins**: Docker, Jenkins LTS (Java 25), exposes port 8080
+   - **Spinnaker**: Docker, Minio (S3), MySQL 8, k3s, then applies Spinnaker
+     via `kubectl kustomize` from the official GitHub manifests
+6. The kustomize overlay pinpoints image tags to the version in `group_vars/all.yml`,
+   configures S3/Minio as the persistent backend, and MySQL for SQL-backed services
+
+### Upgrading Spinnaker
+
+Edit `ansible/playbooks/group_vars/all.yml` and change:
+
+```yaml
+spinnaker_version: 2026.2.2
+```
+
+Then:
+
+```bash
+vagrant provision spinnaker
+```
+
 ## Managing the Stack
 
 ### Starting the Stack

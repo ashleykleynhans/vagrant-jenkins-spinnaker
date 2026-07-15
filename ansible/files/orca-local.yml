@@ -1,0 +1,20 @@
+sql:
+  enabled: true
+  connectionPools:
+    jdbc:
+      default:
+        default: true
+        jdbcUrl: jdbc:mysql://127.0.0.1:3306/orca
+        user: spinnaker
+        password: spinnaker
+        driver: com.mysql.cj.jdbc.Driver
+  migration:
+    jdbcUrl: jdbc:mysql://127.0.0.1:3306/orca
+    user: spinnaker
+    password: spinnaker
+
+executionRepository:
+  sql:
+    enabled: true
+  redis:
+    enabled: false
