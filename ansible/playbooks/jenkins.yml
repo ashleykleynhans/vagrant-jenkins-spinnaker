@@ -32,13 +32,25 @@
         name: "{{ item }}"
         state: present
       loop:
-        - openjdk-17-jre-headless
+        - openjdk-25-jre-headless
         - jenkins
+
+    - name: Configure Jenkins to use Java 25
+      ansible.builtin.lineinfile:
+        path: /etc/default/jenkins
+        regexp: '^JAVA_HOME='
+        line: JAVA_HOME=/usr/lib/jvm/java-25-openjdk-arm64
+
+    - name: Configure Jenkins JAVA_ARGS
+      ansible.builtin.lineinfile:
+        path: /etc/default/jenkins
+        regexp: '^JAVA_ARGS='
+        line: JAVA_ARGS="-Djava.awt.headless=true"
 
     - name: Start Jenkins
       ansible.builtin.service:
         name: jenkins
-        state: started
+        state: restarted
         enabled: yes
 
     - name: Get Admin password
