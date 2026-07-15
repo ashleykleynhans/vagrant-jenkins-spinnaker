@@ -149,7 +149,7 @@ Two VMs are provisioned:
 | **Jenkins** | CI server | Docker, Git |
 | **k3s** | Lightweight Kubernetes | containerd |
 | **Spinnaker** | CD platform (11 microservices) | Redis + MySQL + Minio S3 |
-| **MariaDB** | SQL persistence | k3s StatefulSet (spin-mariadb) |
+| **MariaDB** | SQL persistence | k3s StatefulSet (mariadb) |
 | **Minio** | S3-compatible object store | Docker container, port 9090 |
 | **Redis** | In-memory cache/queue | k3s StatefulSet |
 | **Traefik** | HTTP ingress controller | Built into k3s |

@@ -4,12 +4,12 @@ sql:
     jdbc:
       default:
         default: true
-        jdbcUrl: jdbc:mysql://spin-mariadb:3306/orca
+        jdbcUrl: jdbc:mysql://mariadb:3306/orca
         user: spinnaker
         password: spinnaker
         driver: com.mysql.cj.jdbc.Driver
   migration:
-    jdbcUrl: jdbc:mysql://spin-mariadb:3306/orca
+    jdbcUrl: jdbc:mysql://mariadb:3306/orca
     user: spinnaker
     password: spinnaker
 
