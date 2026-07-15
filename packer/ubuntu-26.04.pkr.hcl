@@ -53,6 +53,7 @@ build {
 
   provisioner "shell" {
     execute_command = "echo '${var.ssh_password}' | sudo -S sh -eux '{{ .Path }}'"
+    expect_disconnect = true
     scripts = [
       "${path.root}/scripts/setup.sh"
     ]
