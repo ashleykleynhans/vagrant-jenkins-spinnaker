@@ -6,37 +6,23 @@ spinnaker:
     pathStyleAccess: true
     versioning: false
 
-  spinnaker:
-    extensibility:
-      plugins-root-path: /opt/clouddriver/plugins
-      plugins:
-        Armory.ObservabilityPlugin:
-          enabled: false
-      repositories:
-        armory-observability-plugin-releases:
-          enabled: false
-
-redis:
-  enabled: false
-  connection: redis://spin-redis:6379
-
 sql:
   enabled: true
   connectionPools:
     jdbc:
       default:
         default: true
-        jdbcUrl: jdbc:mariadb://spin-mariadb:3306/clouddriver
+        jdbcUrl: jdbc:mysql://127.0.0.1:3306/clouddriver
         user: spinnaker
         password: spinnaker
-        driver: org.mariadb.jdbc.Driver
+        driver: com.mysql.cj.jdbc.Driver
     tasks:
       default:
-        jdbcUrl: jdbc:mariadb://spin-mariadb:3306/clouddriver
+        jdbcUrl: jdbc:mysql://127.0.0.1:3306/clouddriver
         user: spinnaker
         password: spinnaker
-        driver: org.mariadb.jdbc.Driver
+        driver: com.mysql.cj.jdbc.Driver
   migration:
-    jdbcUrl: jdbc:mariadb://spin-mariadb:3306/clouddriver
+    jdbcUrl: jdbc:mysql://127.0.0.1:3306/clouddriver
     user: spinnaker
     password: spinnaker
