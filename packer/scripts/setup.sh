@@ -2,20 +2,21 @@
 
 HOME_DIR="${HOME_DIR:-/home/vagrant}"
 
+# Most commands need root; vagrant has passwordless sudo from cloud-init
 # Disable interactive apt prompts
-export DEBIAN_FRONTEND=noninteractive
+echo 'export DEBIAN_FRONTEND=noninteractive' | sudo tee -a /etc/environment
 
 # Disable release upgrades
-sed -i 's/^Prompt=.*/Prompt=never/' /etc/update-manager/release-upgrades
+sudo sed -i 's/^Prompt=.*/Prompt=never/' /etc/update-manager/release-upgrades
 
 # Stop and disable apt timers
-systemctl stop apt-daily.timer apt-daily-upgrade.timer || true
-systemctl disable apt-daily.timer apt-daily-upgrade.timer || true
-systemctl mask apt-daily.service apt-daily-upgrade.service || true
-systemctl daemon-reload
+sudo systemctl stop apt-daily.timer apt-daily-upgrade.timer || true
+sudo systemctl disable apt-daily.timer apt-daily-upgrade.timer || true
+sudo systemctl mask apt-daily.service apt-daily-upgrade.service || true
+sudo systemctl daemon-reload
 
 # Disable periodic apt activities
-cat > /etc/apt/apt.conf.d/10periodic <<EOF
+sudo tee /etc/apt/apt.conf.d/10periodic <<EOF > /dev/null
 APT::Periodic::Enable "0";
 APT::Periodic::Update-Package-Lists "0";
 APT::Periodic::Download-Upgradeable-Packages "0";
@@ -24,13 +25,13 @@ APT::Periodic::Unattended-Upgrade "0";
 EOF
 
 # Update and upgrade
-apt-get -y update
-apt-get -y dist-upgrade -o Dpkg::Options::="--force-confnew"
+sudo apt-get -y update
+sudo apt-get -y dist-upgrade -o Dpkg::Options::="--force-confnew"
 
 # Install UTM guest support
-apt-get -y install --no-install-recommends spice-vdagent qemu-guest-agent spice-webdavd || true
+sudo apt-get -y install --no-install-recommends spice-vdagent qemu-guest-agent spice-webdavd || true
 
-# Install Vagrant SSH key
+# Install Vagrant SSH key (runs as vagrant, targets vagrant's home)
 mkdir -p "$HOME_DIR/.ssh"
 pubkey_url="https://raw.githubusercontent.com/hashicorp/vagrant/main/keys/vagrant.pub"
 if command -v wget >/dev/null 2>&1; then
@@ -41,33 +42,31 @@ else
   echo "Cannot download vagrant public key"
   exit 1
 fi
-
-chown -R vagrant "$HOME_DIR/.ssh"
 chmod -R go-rwsx "$HOME_DIR/.ssh"
 
-# Ensure password-less sudo for vagrant
-echo 'vagrant ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/99_vagrant
-chmod 440 /etc/sudoers.d/99_vagrant
+# Ensure password-less sudo for vagrant (cloud-init should handle this, but be safe)
+echo 'vagrant ALL=(ALL) NOPASSWD:ALL' | sudo tee /etc/sudoers.d/99_vagrant > /dev/null
+sudo chmod 440 /etc/sudoers.d/99_vagrant
 
 # Cleanup
-apt-get -y autoremove
-apt-get -y clean
+sudo apt-get -y autoremove
+sudo apt-get -y clean
 
 # Remove udev persistent rules
-rm -rf /etc/udev/rules.d/70-persistent-net.rules || true
+sudo rm -rf /etc/udev/rules.d/70-persistent-net.rules || true
 
 # Truncate logs
-find /var/log -type f -exec truncate -s 0 {} \;
+sudo find /var/log -type f -exec truncate -s 0 {} \;
 
 # Clean temp
-rm -rf /tmp/* /var/tmp/*
+sudo rm -rf /tmp/* /var/tmp/*
 
 # Blank machine-id for unique ID on first boot
-truncate -s 0 /etc/machine-id
+sudo truncate -s 0 /etc/machine-id
 if [ -f /var/lib/dbus/machine-id ] && [ ! -L /var/lib/dbus/machine-id ]; then
-  truncate -s 0 /var/lib/dbus/machine-id
+  sudo truncate -s 0 /var/lib/dbus/machine-id
 fi
 
 # Clear history
-rm -f /root/.wget-hsts
+sudo rm -f /root/.wget-hsts
 export HISTSIZE=0

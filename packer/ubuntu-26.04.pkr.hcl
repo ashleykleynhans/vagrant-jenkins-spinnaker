@@ -52,6 +52,7 @@ build {
   sources = ["source.utm-cloud.ubuntu"]
 
   provisioner "shell" {
+    execute_command = "echo '${var.ssh_password}' | sudo -S sh -eux '{{ .Path }}'"
     scripts = [
       "${path.root}/scripts/setup.sh"
     ]
