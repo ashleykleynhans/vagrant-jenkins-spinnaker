@@ -126,8 +126,6 @@ Two VMs are provisioned:
 │                  │ │ • front50      │ │  │
 │                  │ │ • gate         │ │  │
 │                  │ │ • igor         │ │  │
-│                  │ │ • kayenta      │ │  │
-│                  │ │ • keel         │ │  │
 │                  │ │ • mariadb      │ │  │
 │                  │ │ • orca         │ │  │
 │                  │ │ • redis        │ │  │
@@ -148,7 +146,7 @@ Two VMs are provisioned:
 |---------|------|---------|
 | **Jenkins** | CI server | Docker, Git |
 | **k3s** | Lightweight Kubernetes | containerd |
-| **Spinnaker** | CD platform (11 microservices) | Redis + MySQL + Minio S3 |
+| **Spinnaker** | CD platform (9 microservices) | Redis + MariaDB + Minio S3 |
 | **MariaDB** | SQL persistence | k3s StatefulSet (mariadb) |
 | **Minio** | S3-compatible object store | Docker container, port 9090 |
 | **Redis** | In-memory cache/queue | k3s StatefulSet |

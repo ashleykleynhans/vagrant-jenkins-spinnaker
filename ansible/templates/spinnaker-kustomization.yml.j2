@@ -53,3 +53,20 @@ configMapGenerator:
   name: orca
   files:
   - files/orca-local.yml
+
+# Disable non-essential services to reduce resource usage
+patches:
+- target:
+    kind: Deployment
+    name: kayenta
+  patch: |-
+    - op: replace
+      path: /spec/replicas
+      value: 0
+- target:
+    kind: Deployment
+    name: keel
+  patch: |-
+    - op: replace
+      path: /spec/replicas
+      value: 0
