@@ -14,9 +14,6 @@ users:
 
 ssh_pwauth: true
 
-package_update: true
-package_upgrade: true
-
 packages:
   - qemu-guest-agent
   - spice-vdagent

@@ -2,7 +2,16 @@
 
 HOME_DIR="${HOME_DIR:-/home/vagrant}"
 
-# Most commands need root; vagrant has passwordless sudo from cloud-init
+# Wait for any cloud-init / auto-update apt processes to finish
+echo "Waiting for apt lock to release..."
+for i in $(seq 1 60); do
+  if ! sudo fuser /var/lib/apt/lists/lock /var/lib/dpkg/lock /var/lib/dpkg/lock-frontend 2>/dev/null; then
+    break
+  fi
+  echo "  apt is locked (attempt $i/60), waiting..."
+  sleep 5
+done
+
 # Disable interactive apt prompts
 echo 'export DEBIAN_FRONTEND=noninteractive' | sudo tee -a /etc/environment
 
