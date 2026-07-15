@@ -27,7 +27,7 @@ Vagrant.configure("2") do |config|
         spinnaker.vm.provider "utm" do |u|
             u.name = "spinnaker"
             u.memory = 12288
-            u.cpus = 4
+            u.cpus = 6
         end
         spinnaker.vm.hostname = "spinnaker"
         spinnaker.vm.network :private_network, ip: "10.10.10.20"

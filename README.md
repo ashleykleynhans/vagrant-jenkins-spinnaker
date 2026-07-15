@@ -16,9 +16,9 @@ At least the following hardware resources will be required on the host machine:
 | VM        | CPU | Memory |
 |-----------|-----|--------|
 | jenkins   |  2  | 2GB    |
-| spinnaker |  2  | 12GB   |
+| spinnaker |  6  | 12GB   |
 |           |     |        |
-| TOTAL     |  4  | 14GB   |
+| TOTAL     |  8  | 14GB   |
 
 ## Clone the Repository
 
@@ -110,7 +110,7 @@ Two VMs are provisioned:
 │ Host (Apple Silicon Mac)                 │
 │ ┌──────────────┐ ┌────────────────────┐  │
 │ │ Jenkins VM   │ │ Spinnaker VM       │  │
-│ │ 2GB / 2 CPU  │ │ 12GB / 4 CPU       │  │
+│ │ 2GB / 2 CPU  │ │ 12GB / 6 CPU       │  │
 │ │              │ │                    │  │
 │ │ Jenkins LTS  │ │ ┌───────┐          │  │
 │ │ Docker       │ │ │ Minio │          │  │
