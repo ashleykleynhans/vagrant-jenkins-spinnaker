@@ -2,12 +2,17 @@
 - name: Download Docker GPG key
   ansible.builtin.get_url:
     url: https://download.docker.com/linux/ubuntu/gpg
-    dest: /usr/share/keyrings/docker-keyring.asc
+    dest: /tmp/docker.key
     mode: "0644"
+
+- name: Dearmor Docker GPG key
+  ansible.builtin.command:
+    cmd: gpg --dearmor --yes -o /usr/share/keyrings/docker.gpg /tmp/docker.key
+    creates: /usr/share/keyrings/docker.gpg
 
 - name: Add apt repository for stable version of Docker
   ansible.builtin.apt_repository:
-    repo: "deb [signed-by=/usr/share/keyrings/docker-keyring.asc arch={{ vm_architecture }}] https://download.docker.com/linux/ubuntu resolute stable"
+    repo: "deb [signed-by=/usr/share/keyrings/docker.gpg arch={{ vm_architecture }}] https://download.docker.com/linux/ubuntu resolute stable"
     state: present
     filename: docker
 

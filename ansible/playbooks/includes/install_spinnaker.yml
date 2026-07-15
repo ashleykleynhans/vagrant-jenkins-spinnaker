@@ -1,13 +1,15 @@
 ---
 - name: Download spinnaker-community GPG key
-  ansible.builtin.get_url:
-    url: https://us-apt.pkg.dev/doc/repo-signing-key.gpg
-    dest: /usr/share/keyrings/spinnaker-community.asc
-    mode: "0644"
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      curl -fsSL https://us-apt.pkg.dev/doc/repo-signing-key.gpg | \
+        gpg --dearmor --yes -o /usr/share/keyrings/spinnaker-community.gpg
+    creates: /usr/share/keyrings/spinnaker-community.gpg
 
 - name: Add spinnaker-community apt repository
   ansible.builtin.apt_repository:
-    repo: deb [signed-by=/usr/share/keyrings/spinnaker-community.asc arch=all] https://us-apt.pkg.dev/projects/spinnaker-community apt main
+    repo: deb [signed-by=/usr/share/keyrings/spinnaker-community.gpg arch=all] https://us-apt.pkg.dev/projects/spinnaker-community apt main
     state: present
     filename: spinnaker
 
