@@ -1,9 +1,9 @@
 ---
 - name: Add an apt signing key for Docker
-  ansible.builtin.apt_key:
+  ansible.builtin.get_url:
     url: https://download.docker.com/linux/ubuntu/gpg
-    state: present
-    keyring: /usr/share/keyrings/docker.gpg
+    dest: /usr/share/keyrings/docker.gpg
+    mode: "0644"
 
 - name: Add apt repository for stable version of Docker
   ansible.builtin.apt_repository:

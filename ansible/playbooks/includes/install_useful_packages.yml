@@ -8,5 +8,5 @@
     packages:
       - net-tools
       - jq
-      - mlocate
+      - plocate
       - unzip

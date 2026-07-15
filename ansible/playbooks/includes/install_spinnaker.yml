@@ -1,9 +1,9 @@
 ---
 - name: Add an apt signing key for spinnaker-community repo
-  ansible.builtin.apt_key:
+  ansible.builtin.get_url:
     url: https://us-apt.pkg.dev/doc/repo-signing-key.gpg
-    state: present
-    keyring: /usr/share/keyrings/spinnaker-community.gpg
+    dest: /usr/share/keyrings/spinnaker-community.gpg
+    mode: "0644"
 
 - name: Add spinnaker-community apt repository
   ansible.builtin.apt_repository:
