@@ -229,7 +229,7 @@ Ports are forwarded from the VMs to your host via UTM:
 | Service | Host URL | VM Port |
 |---------|----------|---------|
 | Spinnaker Deck (UI) | http://localhost:9000 | 80 |
-| Spinnaker Gate (API) | http://localhost:8084 | 8084 |
+| Spinnaker Gate (API) | http://localhost:9000/api/v1 | 80 |
 | Jenkins | http://localhost:8080 | 8080 |
 
 Login credentials: `admin` / `admin`

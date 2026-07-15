@@ -28,7 +28,6 @@ Vagrant.configure("2") do |config|
         end
         spinnaker.vm.hostname = "spinnaker"
         spinnaker.vm.network :forwarded_port, guest: 80, host: 9000
-        spinnaker.vm.network :forwarded_port, guest: 8084, host: 8084
         spinnaker.vm.provision "ansible" do |ansible|
             ansible.compatibility_mode = "2.0"
             ansible.playbook = "ansible/playbooks/spinnaker.yml"
