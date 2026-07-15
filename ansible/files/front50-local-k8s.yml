@@ -12,11 +12,11 @@ sql:
     jdbc:
       default:
         default: true
-        jdbcUrl: jdbc:mysql://127.0.0.1:3306/front50
+        jdbcUrl: jdbc:mariadb://spin-mariadb:3306/front50
         user: spinnaker
         password: spinnaker
-        driver: com.mysql.cj.jdbc.Driver
+        driver: org.mariadb.jdbc.Driver
   migration:
-    jdbcUrl: jdbc:mysql://127.0.0.1:3306/front50
+    jdbcUrl: jdbc:mariadb://spin-mariadb:3306/front50
     user: spinnaker
     password: spinnaker

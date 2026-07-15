@@ -4,11 +4,11 @@ sql:
     jdbc:
       default:
         default: true
-        jdbcUrl: jdbc:mysql://127.0.0.1:3306/igor
+        jdbcUrl: jdbc:mariadb://spin-mariadb:3306/igor
         user: spinnaker
         password: spinnaker
-        driver: com.mysql.cj.jdbc.Driver
+        driver: org.mariadb.jdbc.Driver
   migration:
-    jdbcUrl: jdbc:mysql://127.0.0.1:3306/igor
+    jdbcUrl: jdbc:mariadb://spin-mariadb:3306/igor
     user: spinnaker
     password: spinnaker

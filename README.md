@@ -112,10 +112,10 @@ Two VMs are provisioned:
 │ │ Jenkins VM   │ │ Spinnaker VM       │  │
 │ │ 2GB / 2 CPU  │ │ 12GB / 2 CPU       │  │
 │ │              │ │                    │  │
-│ │ Jenkins LTS  │ │ ┌───────┐ ┌──────┐ │  │
-│ │ Docker       │ │ │MySQL 8│ │Minio │ │  │
-│ │              │ │ └───────┘ │(S3)  │ │  │
-│ │ Port 8080    │ │           └──────┘ │  │
+│ │ Jenkins LTS  │ │ ┌───────┐          │  │
+│ │ Docker       │ │ │ Minio │          │  │
+│ │              │ │ │ (S3)  │          │  │
+│ │ Port 8080    │ │ └───────┘          │  │
 │ └──────────────┘ │                    │  │
 │                  │ ┌────────────────┐ │  │
 │                  │ │ k3s (1-node)   │ │  │
@@ -128,6 +128,7 @@ Two VMs are provisioned:
 │                  │ │ • igor         │ │  │
 │                  │ │ • kayenta      │ │  │
 │                  │ │ • keel         │ │  │
+│                  │ │ • mariadb      │ │  │
 │                  │ │ • orca         │ │  │
 │                  │ │ • redis        │ │  │
 │                  │ │ • rosco        │ │  │
@@ -148,7 +149,7 @@ Two VMs are provisioned:
 | **Jenkins** | CI server | Docker, Git |
 | **k3s** | Lightweight Kubernetes | containerd |
 | **Spinnaker** | CD platform (11 microservices) | Redis + MySQL + Minio S3 |
-| **MySQL 8** | SQL persistence | clouddriver, front50, orca, echo, igor |
+| **MariaDB** | SQL persistence | k3s StatefulSet (spin-mariadb) |
 | **Minio** | S3-compatible object store | Docker container, port 9090 |
 | **Redis** | In-memory cache/queue | k3s StatefulSet |
 | **Traefik** | HTTP ingress controller | Built into k3s |
