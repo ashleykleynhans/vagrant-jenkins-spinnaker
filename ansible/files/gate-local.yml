@@ -1,10 +1,8 @@
-security:
-  basicform:
-    enabled: true
-  user:
-    name: admin
-    password: admin
-    role: admin
+spring:
+  security:
+    user:
+      name: admin
+      password: "{noop}admin"
 
 server:
   servlet:
