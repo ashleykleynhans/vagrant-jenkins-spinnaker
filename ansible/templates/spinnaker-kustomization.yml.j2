@@ -58,3 +58,9 @@ patches:
     - op: replace
       path: /spec/replicas
       value: 0
+- target:
+    kind: Ingress
+    name: spinnaker-ingress
+  patch: |-
+    - op: remove
+      path: /spec/rules/0/host
