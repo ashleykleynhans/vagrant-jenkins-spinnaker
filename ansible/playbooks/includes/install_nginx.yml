@@ -1,0 +1,18 @@
+---
+- name: Install nginx
+  ansible.builtin.apt:
+    name: nginx
+    state: latest
+
+- name: Remove default nginx config
+  ansible.builtin.file:
+    name: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: restart nginx
+
+- name: Create Spinnaker config for nginx
+  ansible.builtin.copy:
+    src: ../files/spinnaker_nginx
+    dest: /etc/nginx/sites-enabled/spinnaker
+    mode: "0600"
+  notify: restart nginx

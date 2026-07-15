@@ -41,14 +41,6 @@ configMapGenerator:
   name: front50
   files:
   - files/front50-local-k8s.yml
-- behavior: merge
-  name: gate
-  files:
-  - files/gate-local.yml
-- behavior: merge
-  name: deck
-  files:
-  - files/settings-local.js
 
 # Disable non-essential services to reduce resource usage
 patches:

@@ -67,6 +67,8 @@
       loop:
         - src: ../files/spinnaker-local.yml
           dest: /opt/spinnaker-overlay/files/spinnaker-local.yml
+        - src: ../files/spinnaker-local.yml
+          dest: /opt/spinnaker-overlay/files/spinnaker-local.yml
         - src: ../files/clouddriver-local.yml
           dest: /opt/spinnaker-overlay/files/clouddriver-local.yml
         - src: ../files/front50-local-k8s.yml
@@ -78,14 +80,6 @@
       ansible.builtin.template:
         src: ../templates/spinnaker-kustomization.yml.j2
         dest: /opt/spinnaker-overlay/kustomization.yml
-        owner: vagrant
-        group: vagrant
-        mode: "0644"
-
-    - name: Generate settings-local.js from template
-      ansible.builtin.template:
-        src: ../templates/settings-local.js.j2
-        dest: /opt/spinnaker-overlay/files/settings-local.js
         owner: vagrant
         group: vagrant
         mode: "0644"
@@ -106,6 +100,9 @@
       retries: 3
       delay: 30
 
+    - name: Include task to install Nginx reverse proxy
+      ansible.builtin.include_tasks: includes/install_nginx.yml
+
     - name: Show pod status
       ansible.builtin.shell:
         cmd: k3s kubectl get pods -n spinnaker
@@ -114,3 +111,9 @@
     - name: Print pod status
       ansible.builtin.debug:
         msg: "{{ pod_status.stdout_lines }}"
+
+  handlers:
+    - name: restart nginx
+      ansible.builtin.service:
+        name: nginx
+        state: restarted
