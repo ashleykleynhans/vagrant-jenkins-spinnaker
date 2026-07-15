@@ -110,7 +110,7 @@ Two VMs are provisioned:
 │ Host (Apple Silicon Mac)                 │
 │ ┌──────────────┐ ┌────────────────────┐  │
 │ │ Jenkins VM   │ │ Spinnaker VM       │  │
-│ │ 2GB / 2 CPU  │ │ 12GB / 2 CPU       │  │
+│ │ 2GB / 2 CPU  │ │ 12GB / 4 CPU       │  │
 │ │              │ │                    │  │
 │ │ Jenkins LTS  │ │ ┌───────┐          │  │
 │ │ Docker       │ │ │ Minio │          │  │

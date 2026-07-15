@@ -96,7 +96,7 @@
 
     - name: Wait for Spinnaker pods
       ansible.builtin.shell:
-        cmd: k3s kubectl wait --for=condition=Ready pods --all -n spinnaker --timeout=900s
+        cmd: k3s kubectl wait --for=condition=Ready pods --all -n spinnaker --timeout=1800s
       register: pods_ready
       until: pods_ready.rc == 0
       retries: 3
