@@ -55,7 +55,14 @@ build {
     execute_command = "echo '${var.ssh_password}' | sudo -S sh -eux '{{ .Path }}'"
     expect_disconnect = true
     scripts = [
-      "${path.root}/scripts/setup.sh"
+      "${path.root}/scripts/apt-upgrade.sh"
+    ]
+  }
+
+  provisioner "shell" {
+    execute_command = "echo '${var.ssh_password}' | sudo -S sh -eux '{{ .Path }}'"
+    scripts = [
+      "${path.root}/scripts/cleanup.sh"
     ]
     environment_vars = [
       "HOME_DIR=/home/${var.ssh_username}"
