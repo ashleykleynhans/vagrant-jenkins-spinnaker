@@ -12,22 +12,20 @@
     - name: Include task to install docker
       ansible.builtin.include_tasks: includes/install_docker.yml
 
-    - name: Download Jenkins apt key
-      ansible.builtin.get_url:
-        url: https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
-        dest: /tmp/jenkins.key
-        mode: "0644"
-
-    - name: Dearmor Jenkins apt key
-      ansible.builtin.command:
-        cmd: gpg --dearmor --yes -o /usr/share/keyrings/jenkins.gpg /tmp/jenkins.key
+    - name: Dearmor and install Jenkins GPG key
+      ansible.builtin.shell:
+        cmd: |
+          set -o pipefail
+          curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | \
+            gpg --dearmor --yes -o /usr/share/keyrings/jenkins.gpg
         creates: /usr/share/keyrings/jenkins.gpg
 
     - name: Set Jenkins apt repository
       ansible.builtin.apt_repository:
-        repo: deb [signed-by=/usr/share/keyrings/jenkins.gpg] https://pkg.jenkins.io/debian-stable/ binary/
+        repo: deb [signed-by=/usr/share/keyrings/jenkins.gpg] https://pkg.jenkins.io/debian-stable binary/
         filename: jenkins
         state: present
+        update_cache: false
 
     - name: Install Java and Jenkins
       ansible.builtin.apt:
