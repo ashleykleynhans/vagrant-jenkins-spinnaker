@@ -115,7 +115,7 @@ Two VMs are provisioned:
 │ │ Jenkins LTS  │ │ ┌───────┐          │  │
 │ │ Docker       │ │ │ Minio │          │  │
 │ │              │ │ │ (S3)  │          │  │
-│ │ Port 8080    │ │ └───────┘          │  │
+│ │ → :8080      │ │ └───────┘          │  │
 │ └──────────────┘ │                    │  │
 │                  │ ┌────────────────┐ │  │
 │                  │ │ k3s (1-node)   │ │  │
@@ -221,6 +221,21 @@ Then:
 ```bash
 vagrant provision spinnaker
 ```
+
+## Accessing Services
+
+Ports are forwarded from the VMs to your host via UTM:
+
+| Service | Host URL | VM Port |
+|---------|----------|---------|
+| Spinnaker Deck (UI) | http://localhost:9000 | 80 |
+| Spinnaker Gate (API) | http://localhost:8084 | 8084 |
+| Jenkins | http://localhost:8080 | 8080 |
+
+Login credentials: `admin` / `admin`
+
+> [!NOTE]
+> After `vagrant up`, Spinnaker pods take 5-15 minutes to start (9 JVM services on a single VM).
 
 ## Managing the Stack
 

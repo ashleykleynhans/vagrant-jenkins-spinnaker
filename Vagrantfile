@@ -12,13 +12,10 @@ Vagrant.configure("2") do |config|
             u.cpus = 2
         end
         jenkins.vm.hostname = "jenkins"
-        jenkins.vm.network :private_network, ip: "10.10.10.10"
+        jenkins.vm.network :forwarded_port, guest: 8080, host: 8080
         jenkins.vm.provision "ansible" do |ansible|
             ansible.compatibility_mode = "2.0"
             ansible.playbook = "ansible/playbooks/jenkins.yml"
-            ansible.extra_vars = {
-                node_ip: "10.10.10.10",
-            }
         end
     end
 
@@ -30,13 +27,11 @@ Vagrant.configure("2") do |config|
             u.cpus = 6
         end
         spinnaker.vm.hostname = "spinnaker"
-        spinnaker.vm.network :private_network, ip: "10.10.10.20"
+        spinnaker.vm.network :forwarded_port, guest: 80, host: 9000
+        spinnaker.vm.network :forwarded_port, guest: 8084, host: 8084
         spinnaker.vm.provision "ansible" do |ansible|
             ansible.compatibility_mode = "2.0"
             ansible.playbook = "ansible/playbooks/spinnaker.yml"
-            ansible.extra_vars = {
-                node_ip: "10.10.10.20",
-            }
         end
     end
 end
