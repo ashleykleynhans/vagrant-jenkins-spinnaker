@@ -45,6 +45,10 @@ configMapGenerator:
   name: gate
   files:
   - files/gate-local.yml
+- behavior: merge
+  name: deck
+  files:
+  - files/settings-local.js
 
 # Disable non-essential services to reduce resource usage
 patches:
