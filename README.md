@@ -76,7 +76,7 @@ packer build -var-file=ubuntu-26.04.auto.pkrvars.hcl ubuntu-26.04.pkr.hcl
 cd ..
 
 # Register the built box with Vagrant
-vagrant box add builds/ashleykleynhans-ubuntu2604-arm64.box --name ashleykleynhans/ubuntu2604-arm64
+vagrant box add builds/ashleykleynhans/ubuntu2604-arm64.box --name ashleykleynhans/ubuntu2604-arm64
 ```
 
 #### Build stages
