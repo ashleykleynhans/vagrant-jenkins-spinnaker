@@ -32,11 +32,12 @@ source "utm-cloud" "ubuntu" {
   hard_drive_interface   = "nvme"
   uefi_boot              = true
   hypervisor             = true
+  use_cd                 = true
+  cd_label               = "cidata"
   cd_content = {
     "user-data" = templatefile("${path.root}/http/user-data.pkrtpl", { ssh_username = var.ssh_username, ssh_password = var.ssh_password })
     "meta-data" = file("${path.root}/http/meta-data")
   }
-  cd_label               = "cidata"
   resize_cloud_image     = true
   ssh_username           = var.ssh_username
   ssh_password           = var.ssh_password
