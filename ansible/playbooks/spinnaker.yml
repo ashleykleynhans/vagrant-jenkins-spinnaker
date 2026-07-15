@@ -67,16 +67,10 @@
       loop:
         - src: ../files/clouddriver-local.yml
           dest: /opt/spinnaker-overlay/files/clouddriver-local.yml
-        - src: ../files/echo-local.yml
-          dest: /opt/spinnaker-overlay/files/echo-local.yml
         - src: ../files/front50-local-k8s.yml
           dest: /opt/spinnaker-overlay/files/front50-local-k8s.yml
         - src: ../files/gate-local.yml
           dest: /opt/spinnaker-overlay/files/gate-local.yml
-        - src: ../files/igor-local.yml
-          dest: /opt/spinnaker-overlay/files/igor-local.yml
-        - src: ../files/orca-local.yml
-          dest: /opt/spinnaker-overlay/files/orca-local.yml
 
     - name: Generate kustomization.yml from template
       ansible.builtin.template:

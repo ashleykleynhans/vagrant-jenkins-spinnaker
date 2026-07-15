@@ -5,24 +5,3 @@ spinnaker:
     region: us-east-1
     pathStyleAccess: true
     versioning: false
-
-sql:
-  enabled: true
-  connectionPools:
-    jdbc:
-      default:
-        default: true
-        jdbcUrl: jdbc:mysql://mariadb:3306/clouddriver
-        user: spinnaker
-        password: spinnaker
-        driver: com.mysql.cj.jdbc.Driver
-    tasks:
-      default:
-        jdbcUrl: jdbc:mysql://mariadb:3306/clouddriver
-        user: spinnaker
-        password: spinnaker
-        driver: com.mysql.cj.jdbc.Driver
-  migration:
-    jdbcUrl: jdbc:mysql://mariadb:3306/clouddriver
-    user: spinnaker
-    password: spinnaker

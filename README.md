@@ -175,12 +175,9 @@ VM and routes `/` to Deck and `/api/v1` to Gate.
 │       └── cleanup.sh            # Provisioner: guest tools, SSH key, cleanup
 └── ansible/
     ├── files/
-    │   ├── clouddriver-local.yml  # S3 + MySQL config for clouddriver
-    │   ├── echo-local.yml         # MySQL config for echo
-    │   ├── front50-local-k8s.yml  # S3 + MySQL config for front50
-    │   ├── gate-local.yml         # Basic auth + API path for gate
-    │   ├── igor-local.yml         # MySQL config for igor
-    │   ├── orca-local.yml         # MySQL config for orca
+    │   ├── clouddriver-local.yml   # S3/Minio endpoint for clouddriver
+    │   ├── front50-local-k8s.yml   # S3/Minio endpoint for front50
+    │   ├── gate-local.yml          # Basic auth for gate
     │   ├── docker.json            # Docker daemon config
     │   └── minio.service          # Minio systemd unit
     ├── playbooks/
