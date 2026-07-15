@@ -31,7 +31,7 @@ cd vagrant-jenkins-spinnaker
 ./setup.sh
 ```
 
-The setup script installs: Homebrew, UTM, Vagrant, the vagrant-utm plugin, Packer, and Ansible.
+The setup script installs: Homebrew, UTM, Vagrant, the vagrant-utm plugin, Packer, QEMU, and Ansible.
 
 ### Option 2: Manual setup
 
@@ -46,6 +46,9 @@ vagrant plugin install vagrant_utm
 # Install Packer
 brew tap hashicorp/tap
 brew install hashicorp/tap/packer
+
+# Install QEMU (provides qemu-img for cloud image resize)
+brew install qemu
 
 # Install Ansible
 brew install ansible

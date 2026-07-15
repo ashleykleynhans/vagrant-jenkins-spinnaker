@@ -27,6 +27,10 @@ echo "Installing Packer"
 brew tap hashicorp/tap
 brew install hashicorp/tap/packer
 
+# Install QEMU (provides qemu-img for Packer cloud image resize)
+echo "Installing QEMU"
+brew install qemu
+
 # Install Ansible
 echo "Installing Ansible"
 brew install ansible
