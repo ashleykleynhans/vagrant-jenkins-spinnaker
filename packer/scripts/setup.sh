@@ -2,15 +2,22 @@
 
 HOME_DIR="${HOME_DIR:-/home/vagrant}"
 
-# Wait for any cloud-init / auto-update apt processes to finish
-echo "Waiting for apt lock to release..."
-for i in $(seq 1 60); do
-  if ! sudo fuser /var/lib/apt/lists/lock /var/lib/dpkg/lock /var/lib/dpkg/lock-frontend 2>/dev/null; then
-    break
-  fi
-  echo "  apt is locked (attempt $i/60), waiting..."
-  sleep 5
-done
+# Retry helper: runs a command until it succeeds or max attempts reached
+retry_apt() {
+  local desc="$1"; shift
+  local max=30
+  for i in $(seq 1 $max); do
+    if sudo "$@" 2>&1; then
+      return 0
+    fi
+    if [ "$i" -eq "$max" ]; then
+      echo "ERROR: $desc failed after $max attempts"
+      return 1
+    fi
+    echo "  $desc locked (attempt $i/$max), waiting..."
+    sleep 10
+  done
+}
 
 # Disable interactive apt prompts
 echo 'export DEBIAN_FRONTEND=noninteractive' | sudo tee -a /etc/environment
@@ -33,9 +40,9 @@ APT::Periodic::AutocleanInterval "0";
 APT::Periodic::Unattended-Upgrade "0";
 EOF
 
-# Update and upgrade
-sudo apt-get -y update
-sudo apt-get -y dist-upgrade -o Dpkg::Options::="--force-confnew"
+# Update and upgrade with retry (cloud-init may still hold apt lock)
+retry_apt "apt update" apt-get -y update
+retry_apt "apt dist-upgrade" apt-get -y dist-upgrade -o Dpkg::Options::="--force-confnew"
 
 # Install UTM guest support
 sudo apt-get -y install --no-install-recommends spice-vdagent qemu-guest-agent spice-webdavd || true
