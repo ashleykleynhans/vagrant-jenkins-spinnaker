@@ -1,6 +1,31 @@
 services:
   deck:
-    baseUrl: /
+    baseUrl: http://localhost:9000/
+    enabled: true
+  clouddriver:
+    baseUrl: http://clouddriver:7002
+    enabled: true
+  echo:
+    baseUrl: http://echo:8089
     enabled: true
   fiat:
+    baseUrl: http://fiat:7003
+    enabled: true
+  front50:
+    baseUrl: http://front50:8080
+    enabled: true
+  igor:
+    baseUrl: http://igor:8088
+    enabled: true
+  kayenta:
+    baseUrl: http://kayenta:8090
+    enabled: false
+  keel:
+    baseUrl: http://keel:7010
+    enabled: false
+  orca:
+    baseUrl: http://orca:8083
+    enabled: true
+  rosco:
+    baseUrl: http://rosco:8087
     enabled: true
