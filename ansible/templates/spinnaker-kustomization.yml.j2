@@ -111,55 +111,61 @@ patches:
     kind: Deployment
     name: clouddriver
   patch: |-
-    - op: add
+    - op: replace
       path: /spec/template/spec/containers/0/readinessProbe/initialDelaySeconds
       value: 60
+    - op: replace
+      path: /spec/template/spec/containers/0/readinessProbe/timeoutSeconds
+      value: 10
+    - op: replace
+      path: /spec/template/spec/containers/0/readinessProbe/failureThreshold
+      value: 10
 - target:
     kind: Deployment
     name: echo
   patch: |-
-    - op: add
+    - op: replace
       path: /spec/template/spec/containers/0/readinessProbe/initialDelaySeconds
       value: 60
 - target:
     kind: Deployment
     name: fiat
   patch: |-
-    - op: add
+    - op: replace
       path: /spec/template/spec/containers/0/readinessProbe/initialDelaySeconds
       value: 60
 - target:
     kind: Deployment
     name: front50
   patch: |-
-    - op: add
+    - op: replace
       path: /spec/template/spec/containers/0/readinessProbe/initialDelaySeconds
       value: 60
 - target:
     kind: Deployment
     name: gate
   patch: |-
-    - op: add
+    - op: replace
       path: /spec/template/spec/containers/0/readinessProbe/initialDelaySeconds
       value: 60
 - target:
     kind: Deployment
     name: igor
   patch: |-
-    - op: add
+    - op: replace
       path: /spec/template/spec/containers/0/readinessProbe/initialDelaySeconds
       value: 60
 - target:
     kind: Deployment
     name: orca
   patch: |-
-    - op: add
+    - op: replace
       path: /spec/template/spec/containers/0/readinessProbe/initialDelaySeconds
       value: 60
 - target:
     kind: Deployment
     name: rosco
   patch: |-
-    - op: add
+    - op: replace
       path: /spec/template/spec/containers/0/readinessProbe/initialDelaySeconds
       value: 60
