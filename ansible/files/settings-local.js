@@ -1,4 +1,6 @@
-// Override the default gateHost (example.com) to use the same-origin
-// reverse proxy.  Settings-local.js loads after settings.js so we
-// can fix gateHost after it was set incorrectly.
+// Deck's settings.js hardcodes gateHost = 'http://example.com/api/v1' and
+// computes authEndpoint, bakeryDetailUrl, and gateUrl from it.  Since
+// settings-local.js loads after settings.js, we override all three.
 window.spinnakerSettings.gateUrl = '/api/v1';
+window.spinnakerSettings.authEndpoint = '/api/v1/auth/user';
+window.spinnakerSettings.bakeryDetailUrl = '/api/v1/bakery/logs/{{context.region}}/{{context.status.resourceId}}';
