@@ -1,3 +1,6 @@
 ---
 vm_architecture: arm64
 spinnaker_version: 2026.2.2
+jenkins_static_ip: 192.168.64.100
+spinnaker_static_ip: 192.168.64.200
+jenkins_api_token: ""

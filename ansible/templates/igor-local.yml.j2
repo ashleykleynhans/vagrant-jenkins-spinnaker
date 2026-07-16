@@ -1,0 +1,11 @@
+## Igor Jenkins CI integration.
+## To generate an API token in Jenkins:
+##   Jenkins UI -> Dashboard -> Manage Jenkins -> Users -> <user> -> Add new Token
+## Then set jenkins_api_token in ansible/playbooks/group_vars/all.yml
+jenkins:
+  enabled: true
+  masters:
+    - name: jenkins
+      address: http://{{ jenkins_static_ip }}:8080
+      username: ashley
+      password: {{ jenkins_api_token }}

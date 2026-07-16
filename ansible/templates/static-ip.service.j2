@@ -1,0 +1,12 @@
+[Unit]
+Description=Add static IP for inter-VM communication
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/sbin/ip addr add {{ static_ip }}/24 dev enp0s1
+
+[Install]
+WantedBy=multi-user.target

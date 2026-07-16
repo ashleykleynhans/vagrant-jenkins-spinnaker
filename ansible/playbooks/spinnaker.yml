@@ -13,6 +13,23 @@
     - name: Include task to install useful packages
       ansible.builtin.include_tasks: includes/install_useful_packages.yml
 
+    - name: Install static IP systemd service
+      ansible.builtin.template:
+        src: ../templates/static-ip.service.j2
+        dest: /etc/systemd/system/static-ip.service
+        owner: root
+        group: root
+        mode: "0644"
+      vars:
+        static_ip: "{{ spinnaker_static_ip }}"
+
+    - name: Enable and start static IP service
+      ansible.builtin.systemd:
+        name: static-ip
+        daemon_reload: true
+        enabled: true
+        state: started
+
     - name: Install k3s
       ansible.builtin.shell:
         cmd: curl -sfL https://get.k3s.io | sh -
@@ -86,6 +103,14 @@
       ansible.builtin.template:
         src: ../templates/settings-local.js.j2
         dest: /opt/spinnaker-overlay/files/settings-local.js
+        owner: vagrant
+        group: vagrant
+        mode: "0644"
+
+    - name: Generate igor-local.yml from template
+      ansible.builtin.template:
+        src: ../templates/igor-local.yml.j2
+        dest: /opt/spinnaker-overlay/files/igor-local.yml
         owner: vagrant
         group: vagrant
         mode: "0644"

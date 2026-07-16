@@ -9,6 +9,23 @@
     - name: Include task to install useful packages
       ansible.builtin.include_tasks: includes/install_useful_packages.yml
 
+    - name: Install static IP systemd service
+      ansible.builtin.template:
+        src: ../templates/static-ip.service.j2
+        dest: /etc/systemd/system/static-ip.service
+        owner: root
+        group: root
+        mode: "0644"
+      vars:
+        static_ip: "{{ jenkins_static_ip }}"
+
+    - name: Enable and start static IP service
+      ansible.builtin.systemd:
+        name: static-ip
+        daemon_reload: true
+        enabled: true
+        state: started
+
     - name: Include task to install docker
       ansible.builtin.include_tasks: includes/install_docker.yml
 
