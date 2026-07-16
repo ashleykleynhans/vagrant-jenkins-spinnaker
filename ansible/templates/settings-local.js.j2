@@ -3,5 +3,5 @@
 // settings-local.js loads after settings.js, we override all three.
 window.spinnakerSettings.gateUrl = '/api/v1';
 window.spinnakerSettings.authEndpoint = '/api/v1/auth/user';
-window.spinnakerSettings.bakeryDetailUrl = '/api/v1/bakery/logs/{{context.region}}/{{context.status.resourceId}}';
+window.spinnakerSettings.bakeryDetailUrl = '/api/v1/bakery/logs/{% raw %}{{context.region}}{% endraw %}/{% raw %}{{context.status.resourceId}}{% endraw %}';
 window.spinnakerSettings.version = '{{ spinnaker_version }}';
