@@ -1,0 +1,11 @@
+# Fiat's RedisPermissionsRepository uses resilience4j with a
+# default 50ms timeout (PT0.05S) that is too aggressive for
+# resource-constrained VMs.  Bump the Redis timeout to 5s.
+redis:
+  timeout: 5000
+
+resilience4j:
+  timelimiter:
+    instances:
+      redis:
+        timeout-duration: 5s

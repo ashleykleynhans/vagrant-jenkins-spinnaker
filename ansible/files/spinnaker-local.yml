@@ -19,12 +19,3 @@ spinnaker:
     secretAccessKey: minioadmin
     pathStyleAccess: true
     versioning: false
-
-# Fiat's RedisPermissionsRepository uses resilience4j with a
-# default 50ms timeout (PT0.05S) that is too aggressive for
-# resource-constrained VMs.  Bump it to 5 seconds.
-resilience4j:
-  timelimiter:
-    instances:
-      redis:
-        timeout-duration: 5s
