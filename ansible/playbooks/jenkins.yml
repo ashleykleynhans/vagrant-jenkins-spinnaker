@@ -55,6 +55,34 @@
         regexp: '^JAVA_ARGS='
         line: JAVA_ARGS="-Djava.awt.headless=true -Djava.io.tmpdir=/var/lib/jenkins/tmp"
 
+    - name: Relax disk space monitor thresholds for dev VM
+      community.general.xml:
+        path: /var/lib/jenkins/nodeMonitors.xml
+        xpath: /hudson.util.DescribableList/hudson.node__monitors.TemporarySpaceMonitor/freeSpaceThreshold
+        value: 100MiB
+      notify: restart jenkins
+
+    - name: Relax temp space warning threshold for dev VM
+      community.general.xml:
+        path: /var/lib/jenkins/nodeMonitors.xml
+        xpath: /hudson.util.DescribableList/hudson.node__monitors.TemporarySpaceMonitor/freeSpaceWarningThreshold
+        value: 200MiB
+      notify: restart jenkins
+
+    - name: Relax disk space monitor thresholds for dev VM
+      community.general.xml:
+        path: /var/lib/jenkins/nodeMonitors.xml
+        xpath: /hudson.util.DescribableList/hudson.node__monitors.DiskSpaceMonitor/freeSpaceThreshold
+        value: 100MiB
+      notify: restart jenkins
+
+    - name: Relax disk space warning threshold for dev VM
+      community.general.xml:
+        path: /var/lib/jenkins/nodeMonitors.xml
+        xpath: /hudson.util.DescribableList/hudson.node__monitors.DiskSpaceMonitor/freeSpaceWarningThreshold
+        value: 200MiB
+      notify: restart jenkins
+
     - name: Start Jenkins
       ansible.builtin.service:
         name: jenkins
@@ -75,4 +103,9 @@
     - name: restart docker
       ansible.builtin.service:
         name: docker
+        state: restarted
+
+    - name: restart jenkins
+      ansible.builtin.service:
+        name: jenkins
         state: restarted
