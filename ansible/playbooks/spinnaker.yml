@@ -13,12 +13,6 @@
     - name: Include task to install useful packages
       ansible.builtin.include_tasks: includes/install_useful_packages.yml
 
-    - name: Include task to install Docker
-      ansible.builtin.include_tasks: includes/install_docker.yml
-
-    - name: Include task to install Minio as the S3 persistent storage backend
-      ansible.builtin.include_tasks: includes/install_minio.yml
-
     - name: Install k3s
       ansible.builtin.shell:
         cmd: curl -sfL https://get.k3s.io | sh -
@@ -49,6 +43,16 @@
         mode: "0600"
         remote_src: true
 
+    - name: Install k9s
+      ansible.builtin.shell:
+        cmd: |
+          K9S_VERSION=$(curl -s https://api.github.com/repos/derailed/k9s/releases/latest | jq -r .tag_name)
+          curl -sSLO "https://github.com/derailed/k9s/releases/download/${K9S_VERSION}/k9s_Linux_{{ vm_architecture }}.tar.gz"
+          tar xzf "k9s_Linux_{{ vm_architecture }}.tar.gz" k9s
+          install -m 755 k9s /usr/local/bin/k9s
+          rm -f k9s "k9s_Linux_{{ vm_architecture }}.tar.gz"
+        creates: /usr/local/bin/k9s
+
     - name: Create overlay directory
       ansible.builtin.file:
         path: /opt/spinnaker-overlay/files
@@ -67,10 +71,14 @@
       loop:
         - src: ../files/spinnaker.yml
           dest: /opt/spinnaker-overlay/files/spinnaker.yml
+        - src: ../files/spinnaker-local.yml
+          dest: /opt/spinnaker-overlay/files/spinnaker-local.yml
         - src: ../files/clouddriver-local.yml
           dest: /opt/spinnaker-overlay/files/clouddriver-local.yml
         - src: ../files/front50-local-k8s.yml
           dest: /opt/spinnaker-overlay/files/front50-local-k8s.yml
+        - src: ../files/minio-k8s.yml
+          dest: /opt/spinnaker-overlay/minio-k8s.yml
 
     - name: Generate kustomization.yml from template
       ansible.builtin.template:
@@ -90,7 +98,7 @@
 
     - name: Wait for Spinnaker pods
       ansible.builtin.shell:
-        cmd: k3s kubectl wait --for=condition=Ready pods --all -n spinnaker --timeout=1800s
+        cmd: k3s kubectl wait --for=condition=Ready pods --all -n spinnaker --timeout=600s
       register: pods_ready
       until: pods_ready.rc == 0
       retries: 3

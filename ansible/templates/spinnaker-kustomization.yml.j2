@@ -2,6 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
 - https://github.com/spinnaker/spinnaker.git/spinnaker-kustomize?ref=spinnaker-release-{{ spinnaker_version }}
+- minio-k8s.yml
 namespace: spinnaker
 
 images:
@@ -33,6 +34,7 @@ configMapGenerator:
   name: spinnaker
   files:
   - files/spinnaker.yml
+  - files/spinnaker-local.yml
 - behavior: merge
   name: clouddriver
   files:
@@ -42,8 +44,39 @@ configMapGenerator:
   files:
   - files/front50-local-k8s.yml
 
-# Disable non-essential services to reduce resource usage
 patches:
+
+# --- AWS credentials for Minio S3 access (front50 + clouddriver) ---
+- target:
+    kind: Deployment
+    name: front50
+  patch: |-
+    - op: add
+      path: /spec/template/spec/containers/0/env/-
+      value:
+        name: AWS_ACCESS_KEY_ID
+        value: minioadmin
+    - op: add
+      path: /spec/template/spec/containers/0/env/-
+      value:
+        name: AWS_SECRET_ACCESS_KEY
+        value: minioadmin
+- target:
+    kind: Deployment
+    name: clouddriver
+  patch: |-
+    - op: add
+      path: /spec/template/spec/containers/0/env/-
+      value:
+        name: AWS_ACCESS_KEY_ID
+        value: minioadmin
+    - op: add
+      path: /spec/template/spec/containers/0/env/-
+      value:
+        name: AWS_SECRET_ACCESS_KEY
+        value: minioadmin
+
+# --- Disable non-essential services ---
 - target:
     kind: Deployment
     name: kayenta

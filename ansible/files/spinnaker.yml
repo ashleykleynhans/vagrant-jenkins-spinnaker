@@ -1,3 +1,6 @@
+redis:
+  connection: redis://redis:6379
+
 services:
   deck:
     baseUrl: http://localhost:9000/

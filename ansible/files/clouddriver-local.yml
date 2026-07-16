@@ -1,7 +1,10 @@
 spinnaker:
   s3:
     enabled: true
-    endpoint: http://127.0.0.1:9090
+    endpoint: http://minio:9000
+    bucket: spinnaker
     region: us-east-1
+    accessKeyId: minioadmin
+    secretAccessKey: minioadmin
     pathStyleAccess: true
     versioning: false

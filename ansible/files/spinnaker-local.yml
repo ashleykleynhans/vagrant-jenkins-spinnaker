@@ -1,0 +1,21 @@
+# Overrides for configuration shared by all Spinnaker JVM services.
+# See: https://github.com/spinnaker/spinnaker/blob/main/spinnaker-config/spinnaker.yml
+
+# The orca queue Redis client (RedisOrcaQueueConfiguration) uses a
+# separate connection key from the main redis.connection.  Without this
+# it defaults to localhost:6379 and crashes.
+keiko:
+  queue:
+    redis:
+      connection: redis://redis:6379
+
+spinnaker:
+  s3:
+    enabled: true
+    endpoint: http://minio:9000
+    bucket: spinnaker
+    region: us-east-1
+    accessKeyId: minioadmin
+    secretAccessKey: minioadmin
+    pathStyleAccess: true
+    versioning: false
