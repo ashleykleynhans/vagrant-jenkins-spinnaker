@@ -41,11 +41,19 @@
         regexp: '^JAVA_HOME='
         line: JAVA_HOME=/usr/lib/jvm/java-25-openjdk-arm64
 
-    - name: Configure Jenkins JAVA_ARGS
+    - name: Create Jenkins tmpdir on persistent storage
+      ansible.builtin.file:
+        path: /var/lib/jenkins/tmp
+        state: directory
+        owner: jenkins
+        group: jenkins
+        mode: "0755"
+
+    - name: Configure Jenkins to use persistent tmpdir
       ansible.builtin.lineinfile:
         path: /etc/default/jenkins
         regexp: '^JAVA_ARGS='
-        line: JAVA_ARGS="-Djava.awt.headless=true"
+        line: JAVA_ARGS="-Djava.awt.headless=true -Djava.io.tmpdir=/var/lib/jenkins/tmp"
 
     - name: Start Jenkins
       ansible.builtin.service:
