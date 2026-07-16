@@ -9,3 +9,7 @@ resilience4j:
     instances:
       redis:
         timeout-duration: 5s
+
+# Grant admin user unrestricted access so login works on first boot.
+fiat:
+  defaultToUnrestrictedUser: true
