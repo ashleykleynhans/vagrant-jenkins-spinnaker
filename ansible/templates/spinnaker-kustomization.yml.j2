@@ -97,3 +97,61 @@ patches:
   patch: |-
     - op: remove
       path: /spec/rules/0/host
+
+# --- Readiness probe startup delay (JVM needs 60s+) ---
+- target:
+    kind: Deployment
+    name: clouddriver
+  patch: |-
+    - op: add
+      path: /spec/template/spec/containers/0/readinessProbe/initialDelaySeconds
+      value: 60
+- target:
+    kind: Deployment
+    name: echo
+  patch: |-
+    - op: add
+      path: /spec/template/spec/containers/0/readinessProbe/initialDelaySeconds
+      value: 60
+- target:
+    kind: Deployment
+    name: fiat
+  patch: |-
+    - op: add
+      path: /spec/template/spec/containers/0/readinessProbe/initialDelaySeconds
+      value: 60
+- target:
+    kind: Deployment
+    name: front50
+  patch: |-
+    - op: add
+      path: /spec/template/spec/containers/0/readinessProbe/initialDelaySeconds
+      value: 60
+- target:
+    kind: Deployment
+    name: gate
+  patch: |-
+    - op: add
+      path: /spec/template/spec/containers/0/readinessProbe/initialDelaySeconds
+      value: 60
+- target:
+    kind: Deployment
+    name: igor
+  patch: |-
+    - op: add
+      path: /spec/template/spec/containers/0/readinessProbe/initialDelaySeconds
+      value: 60
+- target:
+    kind: Deployment
+    name: orca
+  patch: |-
+    - op: add
+      path: /spec/template/spec/containers/0/readinessProbe/initialDelaySeconds
+      value: 60
+- target:
+    kind: Deployment
+    name: rosco
+  patch: |-
+    - op: add
+      path: /spec/template/spec/containers/0/readinessProbe/initialDelaySeconds
+      value: 60
