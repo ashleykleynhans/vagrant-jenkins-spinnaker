@@ -47,6 +47,10 @@ configMapGenerator:
   name: fiat
   files:
   - files/fiat-local.yml
+- behavior: merge
+  name: deck
+  files:
+  - files/settings-local.js
 
 patches:
 

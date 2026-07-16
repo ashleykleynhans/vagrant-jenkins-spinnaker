@@ -79,6 +79,8 @@
           dest: /opt/spinnaker-overlay/files/front50-local-k8s.yml
         - src: ../files/fiat-local.yml
           dest: /opt/spinnaker-overlay/files/fiat-local.yml
+        - src: ../files/settings-local.js
+          dest: /opt/spinnaker-overlay/files/settings-local.js
         - src: ../files/minio-k8s.yml
           dest: /opt/spinnaker-overlay/minio-k8s.yml
 
